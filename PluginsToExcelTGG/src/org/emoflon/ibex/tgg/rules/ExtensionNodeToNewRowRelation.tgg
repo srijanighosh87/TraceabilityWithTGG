@@ -1,0 +1,138 @@
+#using PluginsToExcelTGG.*
+#using AttrCondDefLibrary.*
+
+#rule ExtensionNodeToNewRowRelation #with PluginsToExcelTGG
+
+#source { 
+	xmlFolderDrive:Folder{
+		-subFolder->xmlFolder_1
+	}
+	xmlFolder_1:Folder{
+		-subFolder->xmlFolder_2
+	}
+	xmlFolder_2:Folder{
+		-subFolder -> pluginFolder
+	}
+
+	pluginFolder:Folder {
+		-file -> pluginXmlFile
+	}
+
+	pluginXmlFile:File {
+		-rootNode -> pluginNode
+	}
+
+	extensionNodeOld:Node{
+		//-attribute->extensionAttrOld
+	}
+	
+	/* extensionAttrOld:Attribute{
+	} */
+	
+	pluginNode:Node {
+		-children->extensionNodeOld
+		++-children -> extensionNode
+	}
+
+	
+	++extensionNode:Node {
+		name:="extension"
+		++-attribute -> extensionAttr
+	}
+
+	++extensionAttr:Attribute{
+		name:="point"
+	}
+}
+
+#target {
+	// create new cells for extension points
+	++cell_1:Cell{
+		//text:=""
+	}
+
+	++cell_2:Cell
+
+	++cell_3:Cell
+
+	++cell_4:Cell
+
+		// create new row for extension
+	++newRowForExtenstion:Row{
+		++-cell -> cell_1
+		++-cell -> cell_2
+		++-cell -> cell_3
+		++-cell -> cell_4
+	}
+
+		// add new cells to existing cols
+	componentsColumn:Column{
+		++-cell -> cell_1
+		-nextColumn -> dependenciesColumn
+	}
+
+	dependenciesColumn:Column{
+		++-cell -> cell_2
+		-nextColumn -> documentationColumn
+	}
+
+	documentationColumn:Column{
+		++-cell -> cell_3
+		-nextColumn -> reviewColumn
+	}
+
+	reviewColumn:Column{
+		++-cell -> cell_4
+	}
+	
+	lastRow:Row{
+		++-nextRow->newRowForExtenstion
+	}
+	
+	blockHeader:Row
+	
+	sheet:Sheet {
+		++-rowobject -> newRowForExtenstion
+		++-cell -> cell_1
+		++-cell -> cell_2
+		++-cell -> cell_3
+		++-cell -> cell_4
+		-rowobject->blockHeader
+		-rowobject->lastRow
+		-colobject -> componentsColumn
+		-colobject -> dependenciesColumn
+		-colobject -> documentationColumn
+		-colobject -> reviewColumn
+	}
+
+	excelFile:File {
+		-sheet -> sheet
+	}
+}
+
+#correspondence {
+	xmlFolderToExcelFileRule:XMLFolderToExcelFileRelation{
+		#src->xmlFolder_2
+		#trg->excelFile
+	}
+	
+	++extensionNodeToNewRowRule:ExtensionNodeToNewRowRelation{
+		#src->extensionNode
+		#trg->newRowForExtenstion
+	}
+	
+	pluginFolderToBlockHeaderRowRule:PluginFolderToExcelBlockHeaderRowRelation{
+		#src->pluginFolder
+		#trg->blockHeader
+	}
+	
+	extensionNodeToNewUnderBlockHeaderRowRule:ExtenstionNodeToNewRowRelation{
+		#src->extensionNodeOld
+		#trg->lastRow
+	}
+	
+}
+
+#attributeConditions {
+	eq_string(extensionAttr.value, cell_2.text)
+}

@@ -1,0 +1,124 @@
+#using PluginsToExcelTGG.*
+#using AttrCondDefLibrary.*
+
+#rule PluginFolderToBlockHeaderRowRelation #with PluginsToExcelTGG
+
+#source {
+	xmlFolderDrive:Folder{
+		-subFolder->xmlFolder_1
+	}
+	xmlFolder_1:Folder{
+		-subFolder->xmlFolder_2
+	}
+	xmlFolder_2:Folder{
+		++-subFolder->pluginFolder
+	}
+	
+	++pluginFolder:Folder {
+		++-file->pluginXmlFile
+	}
+	
+	++pluginXmlFile:File {
+		name:="plugin.xml"
+		++-rootNode->pluginNode
+	}
+	
+	++pluginNode:Node{
+		name:="plugin"
+	}
+}
+
+#target {
+	
+	//create cell for new row for every plugin.xml
+	++cell_1:Cell{
+		backgroundColor:="#FABF8F"
+		fontStyle:="bold"
+	}
+	++cell_2:Cell{
+		text:=""
+		backgroundColor:="#FABF8F"
+		fontStyle:="bold"
+	}
+	++cell_3:Cell{
+		text:=""
+		backgroundColor:="#FABF8F"
+		fontStyle:="bold"
+	}
+	++cell_4:Cell{
+		text:=""
+		backgroundColor:="#FABF8F"
+		fontStyle:="bold"
+	}
+	
+	//create new row for file
+	++blockheaderRow:Row{
+		++-cell->cell_1
+		++-cell->cell_2
+		++-cell->cell_3
+		++-cell->cell_4
+	}
+	
+	//add connection to last row
+	lastRow:Row{
+		++-nextRow->blockheaderRow
+	}
+	
+	//add cells to existing column
+	componentsColumn:Column{
+		++-cell->cell_1
+		-nextColumn->dependenciesColumn
+	}
+	dependenciesColumn:Column{
+		++-cell->cell_2
+		-nextColumn->documentationColumn
+	}
+	documentationColumn:Column{
+		++-cell->cell_3
+		-nextColumn->reviewColumn
+	}
+	reviewColumn:Column{
+		++-cell->cell_4
+	}
+	
+	
+	excelFile:File {
+		-sheet->sheet
+	}
+	sheet:Sheet {
+		//add new row
+		++-rowobject->blockheaderRow
+		
+		//add new cells
+		++-cell->cell_1
+		++-cell->cell_2
+		++-cell->cell_3
+		++-cell->cell_4
+		
+		//existing elements
+		-rowobject->lastRow
+		-colobject->componentsColumn
+		-colobject->dependenciesColumn
+		-colobject->documentationColumn
+		-colobject->reviewColumn
+	}
+}
+
+#correspondence {
+	xmlFolderToExcelFileRule:XMLFolderToExcelFileRelation{
+		#src->xmlFolder_2
+		#trg->excelFile
+	}
+	
+	++ pluginFolderToBlockHeaderRowRule:PluginFolderToExcelBlockHeaderRowRelation{
+		#src->pluginFolder
+		#trg->blockheaderRow
+	}
+}
+
+#attributeConditions {
+	eq_string(pluginFolder.name, cell_1.text)
+}
+
+
+

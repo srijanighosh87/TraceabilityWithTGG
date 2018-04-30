@@ -1,0 +1,11 @@
+#using PluginsToExcelTGG.*
+#using AttrCondDefLibrary.*
+
+#nac nacForPluginFolderToBlockHeaderRowRelation #for PluginFolderToBlockHeaderRowRelation
+
+#target{
+	lastRow:Row{
+		-nextRow->nextRow
+	}
+	nextRow:Row
+}

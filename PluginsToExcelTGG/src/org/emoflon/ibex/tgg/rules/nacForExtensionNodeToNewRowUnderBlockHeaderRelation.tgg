@@ -1,0 +1,10 @@
+#using PluginsToExcelTGG.*
+#using AttrCondDefLibrary.*
+
+#nac nacForExtensionNodeToNewRowUnderBlockHeaderRelation #for ExtensionNodeToNewRowUnderBlockHeaderRelation
+#target{
+	blockHeader:Row{
+		-nextRow->nextRow
+	}
+	nextRow:Row
+}

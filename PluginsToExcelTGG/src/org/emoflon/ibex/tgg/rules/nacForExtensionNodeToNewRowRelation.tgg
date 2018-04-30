@@ -1,0 +1,10 @@
+#using PluginsToExcelTGG.*
+#using AttrCondDefLibrary.*
+
+#nac nacForExtensionNodeToNewRowRelation #for ExtensionNodeToNewRowRelation
+#target{
+	lastRow:Row{
+		-nextRow->nRow
+	}
+	nRow:Row
+}

@@ -1,0 +1,48 @@
+#import "platform:/plugin/com.kaleidoscope.core.aux.simpleexcel/model/Simpleexcel.ecore"
+#import "platform:/plugin/com.kaleidoscope.core.aux.simpletree/model/Simpletree.ecore"
+
+#schema PluginsToExcelTGG
+	
+#source {
+	Simpletree
+}
+
+#target { 
+	Simpleexcel
+} 
+
+#correspondence {
+	SimpleTreeToSimpleExcelContainerRelation{
+		#src->Node
+		#trg->File
+	}
+	
+	XMLFolderToExcelFileRelation{
+		#src->Folder
+		#trg->File
+	}
+	
+	PluginFolderToExcelBlockHeaderRowRelation {
+		#src->Simpletree.Folder
+		#trg->Simpleexcel.Row
+	}
+	
+	ExtenstionNodeToNewRowRelation{
+		#src->Node
+		#trg->Row
+	}
+	
+	ExtenstionNodeToNewRowUnderRowRelation{
+		#src->Node
+		#trg->Row
+	}
+	
+	ExtensionNodeToNewRowRelation{
+		#src->Node
+		#trg->Row
+	}
+}
+
+#attributeConditions {
+	
+}

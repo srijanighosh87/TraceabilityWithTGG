@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="PluginsToExcelTGG" nsURI="platform:/resource/PluginsToExcelTGG/model/PluginsToExcelTGG.ecore"
+    nsPrefix="PluginsToExcelTGG">
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleTreeToSimpleExcelContainerRelation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="ecore:EClass platform:/plugin/com.kaleidoscope.core.aux.simpletree/model/Simpletree.ecore#//Node"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass platform:/plugin/com.kaleidoscope.core.aux.simpleexcel/model/Simpleexcel.ecore#//File"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XMLFolderToExcelFileRelation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="ecore:EClass platform:/plugin/com.kaleidoscope.core.aux.simpletree/model/Simpletree.ecore#//Folder"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass platform:/plugin/com.kaleidoscope.core.aux.simpleexcel/model/Simpleexcel.ecore#//File"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PluginFolderToExcelBlockHeaderRowRelation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="ecore:EClass platform:/plugin/com.kaleidoscope.core.aux.simpletree/model/Simpletree.ecore#//Folder"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass platform:/plugin/com.kaleidoscope.core.aux.simpleexcel/model/Simpleexcel.ecore#//Row"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExtenstionNodeToNewRowRelation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="ecore:EClass platform:/plugin/com.kaleidoscope.core.aux.simpletree/model/Simpletree.ecore#//Node"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass platform:/plugin/com.kaleidoscope.core.aux.simpleexcel/model/Simpleexcel.ecore#//Row"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExtenstionNodeToNewRowUnderRowRelation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="ecore:EClass platform:/plugin/com.kaleidoscope.core.aux.simpletree/model/Simpletree.ecore#//Node"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass platform:/plugin/com.kaleidoscope.core.aux.simpleexcel/model/Simpleexcel.ecore#//Row"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExtensionNodeToNewRowRelation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="ecore:EClass platform:/plugin/com.kaleidoscope.core.aux.simpletree/model/Simpletree.ecore#//Node"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass platform:/plugin/com.kaleidoscope.core.aux.simpleexcel/model/Simpleexcel.ecore#//Row"/>
+  </eClassifiers>
+</ecore:EPackage>

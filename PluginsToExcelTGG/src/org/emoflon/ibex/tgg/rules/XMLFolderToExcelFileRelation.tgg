@@ -1,0 +1,118 @@
+#using PluginsToExcelTGG.*
+#using AttrCondDefLibrary.*
+
+#rule XMLFolderToExcelFileRelation #with PluginsToExcelTGG
+
+#source {
+	++xmlFolderDrive:Folder{
+		name:="C:"
+		++-subFolder->xmlFolder_1
+	}
+	++xmlFolder_1:Folder{
+		name:="Desktop"
+		++-subFolder->xmlFolder_2
+	}
+	++xmlFolder_2:Folder{
+		name:="My Workspace"
+	}
+}
+
+#target {
+	
+	//Create header cells
+	++componentsCell:Cell{
+		text:="Components"
+		backgroundColor:="#00008B"
+		fontColor:="#FFFFFF"
+		fontSize:=16
+		fontFamily:="Arial Narrow"
+		fontStyle:="bold"
+	}
+	++dependenciesCell:Cell{
+		text:="Dependencies"
+		backgroundColor:="#00008B"
+		fontColor:="#FFFFFF"
+		fontSize:=16
+		fontFamily:="Arial Narrow"
+		fontStyle:="bold"
+	}
+	++documentationCell:Cell{
+		text:="Documentation"
+		backgroundColor:="#00008B"
+		fontColor:="#FFFFFF"
+		fontSize:=16
+		fontFamily:="Arial Narrow"
+		fontStyle:="bold"
+	}
+	++reviewCell:Cell{
+		text:="Review"
+		backgroundColor:="#00008B"
+		fontColor:="#FFFFFF"
+		fontSize:=16
+		fontFamily:="Arial Narrow"
+		fontStyle:="bold"
+	}
+	
+	//create columns and add cells to it
+	++componentsColumn:Column{
+		++-cell->componentsCell
+	}
+	++dependenciesColumn:Column{
+		++-cell->dependenciesCell
+		++-prevColumn->componentsColumn
+	}
+	++documentationColumn:Column{
+		++-cell->documentationCell
+		++-prevColumn->dependenciesColumn
+	}
+	++reviewColumn:Column{
+		++-cell->reviewCell
+		++-prevColumn->documentationColumn
+	}
+	
+	//create header row and add cells to it
+	++headerRow:Row{
+		++-cell->componentsCell
+		++-cell->dependenciesCell
+		++-cell->documentationCell
+		++-cell->reviewCell
+	}
+	
+	//create sheet
+	++sheet:Sheet {
+		//sheet name
+		sheetName:= "Plugin.xmls"
+		
+	 	//columns
+		++-colobject->componentsColumn
+		++-colobject->dependenciesColumn
+		++-colobject->documentationColumn
+		++-colobject->reviewColumn
+		
+		//cells
+		++-cell->componentsCell
+		++-cell->dependenciesCell
+		++-cell->documentationCell
+		++-cell->reviewCell
+		
+		//row
+		++-rowobject->headerRow
+	}
+	
+	//create file and add sheet to it.
+	++excelFile:File {
+		fileName:="Workspace"
+		++-sheet -> sheet
+	}
+}
+
+#correspondence {
+	++xmlFolderToExcelFileRule:XMLFolderToExcelFileRelation{
+		#src-> xmlFolder_2
+		#trg-> excelFile
+	}
+}
+
+#attributeConditions {
+}
+
