@@ -4,6 +4,12 @@
 #rule ExtensionNodeToNewRowUnderBlockHeaderRelation #with PluginsToExcelTGG
 
 #source {
+	xmlFolderDrive:Folder{
+		-subFolder->xmlFolder_1
+	}
+	xmlFolder_1:Folder{
+		-subFolder->xmlFolder_2
+	}
 	xmlFolder_2:Folder{
 		-subFolder -> pluginFolder
 	}
@@ -112,6 +118,7 @@
 
 #attributeConditions {
 	eq_string(extensionAttr.value, cell_2.text)
+	eq_string(newRowForExtenstion.backgroundColor, "Rule 1")
 }
 
 
