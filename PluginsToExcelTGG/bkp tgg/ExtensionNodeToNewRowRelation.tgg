@@ -1,18 +1,9 @@
 #using PluginsToExcelTGG.*
 #using AttrCondDefLibrary.*
 
-#rule ExtensionNodeToNewRowUnderBlockHeaderRelation #with PluginsToExcelTGG
+#abstract #rule ExtensionNodeToNewRowRelation #with PluginsToExcelTGG
 
-#source {
-	/*xmlFolderDrive:Folder{
-		-subFolder->xmlFolder_1
-	}
-	xmlFolder_1:Folder{
-		-subFolder->xmlFolder_2
-	}
-	xmlFolder_2:Folder{
-		-subFolder -> pluginFolder
-	} */
+#source { 
 
 	pluginFolder:Folder {
 		-file -> pluginXmlFile
@@ -22,10 +13,18 @@
 		-rootNode -> pluginNode
 	}
 
+	extensionNodeOld:Node{
+		-attribute->extensionAttrOld
+	}
+
+	extensionAttrOld:Attribute
+	
 	pluginNode:Node {
+		-children->extensionNodeOld
 		++-children -> extensionNode
 	}
 
+	
 	++extensionNode:Node {
 		name:="extension"
 		++-attribute -> extensionAttr
@@ -38,9 +37,7 @@
 
 #target {
 	// create new cells for extension points
-	/* ++cell_1:Cell{
-		text:=""
-	}
+	/* ++cell_1:Cell
 
 	++cell_2:Cell
 
@@ -75,19 +72,23 @@
 	reviewColumn:Column{
 		++-cell -> cell_4
 	} */
-
-		// adding new row after block header
-	blockHeader:Row{
-		++-nextRow -> newRowForExtenstion
+	
+	lastRow:Row{
+		++-nextRow->newRowForExtenstion
 	}
-
+	
+	//blockHeader:Row
+	
 	sheet:Sheet {
 		++-rowobject -> newRowForExtenstion
-		-rowobject -> blockHeader
-		/* ++-cell -> cell_1
+		//-rowobject->blockHeader
+		-rowobject->lastRow
+		/* 
+		++-cell -> cell_1
 		++-cell -> cell_2
 		++-cell -> cell_3
 		++-cell -> cell_4
+		
 		-colobject -> componentsColumn
 		-colobject -> dependenciesColumn
 		-colobject -> documentationColumn
@@ -104,21 +105,26 @@
 		#src->xmlFolder_2
 		#trg->excelFile
 	}*/
-
-	pluginFolderToBlockHeaderRowRule:PluginFolderToExcelBlockHeaderRowRelation{
-		#src->pluginFolder
-		#trg->blockHeader
-	}
-
-	++extensionNodeToNewUnderBlockHeaderRowRule:ExtenstionNodeToNewRowRelation{
+	
+	++extensionNodeToNewRowRule:ExtensionNodeToNewRowRelation{
 		#src->extensionNode
 		#trg->newRowForExtenstion
 	}
+	
+	/*pluginFolderToBlockHeaderRowRule:PluginFolderToExcelBlockHeaderRowRelation{
+		#src->pluginFolder
+		#trg->blockHeader
+	}*/
+	
+	extensionNodeToNewUnderBlockHeaderRowRule:ExtenstionNodeToNewRowRelation{
+		#src->extensionNodeOld
+		#trg->lastRow
+	}
+	
 }
 
 #attributeConditions {
 	//eq_string(extensionAttr.value, cell_2.text)
-	eq_string(newRowForExtenstion.backgroundColor, "Rule 1")
+	eq_string(newRowForExtenstion.backgroundColor, "Rule 2")
+	eq_string(extensionAttr.value,"Rule 2")
 }
-
-

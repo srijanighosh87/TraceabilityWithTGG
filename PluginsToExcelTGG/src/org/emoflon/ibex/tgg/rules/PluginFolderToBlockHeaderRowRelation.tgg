@@ -4,12 +4,12 @@
 #rule PluginFolderToBlockHeaderRowRelation #with PluginsToExcelTGG
 
 #source {
-	xmlFolderDrive:Folder{
+	/*xmlFolderDrive:Folder{
 		-subFolder->xmlFolder_1
 	}
 	xmlFolder_1:Folder{
 		-subFolder->xmlFolder_2
-	}
+	} */
 	xmlFolder_2:Folder{
 		++-subFolder->pluginFolder
 	}
@@ -25,13 +25,27 @@
 	
 	++pluginNode:Node{
 		name:="plugin"
+		++-children->extensionNode
+		++-children->newExtensionNode
 	}
+	
+	++extensionNode:Node{
+		++-attribute->extensionAttr
+	}
+	
+	++extensionAttr:Attribute
+	
+	++newExtensionNode:Node{
+		++-attribute->newExtensionAttr
+	}
+	
+	++newExtensionAttr:Attribute
 }
 
 #target {
 	
 	//create cell for new row for every plugin.xml
-	/* ++cell_1:Cell{
+	++cell_1:Cell{
 		backgroundColor:="#FABF8F"
 		fontStyle:="bold"
 	}
@@ -50,20 +64,27 @@
 		backgroundColor:="#FABF8F"
 		fontStyle:="bold"
 	}
-	 */
+	
 	//create new row for file
 	++blockheaderRow:Row{
-		/* ++-cell->cell_1
+		++-cell->cell_1
 		++-cell->cell_2
 		++-cell->cell_3
-		++-cell->cell_4 */
+		++-cell->cell_4
+		++-nextRow->extensionRow
 	}
 	
 	//add connection to last row
 	lastRow:Row{
 		++-nextRow->blockheaderRow
 	}
-	/* 
+	
+	++extensionRow:Row{
+		++-nextRow->newExtensionRow
+	}
+	
+	++newExtensionRow:Row
+	 
 	//add cells to existing column
 	componentsColumn:Column{
 		++-cell->cell_1
@@ -80,7 +101,7 @@
 	reviewColumn:Column{
 		++-cell->cell_4
 	}
-	*/
+	
 	
 	excelFile:File {
 		-sheet->sheet
@@ -88,21 +109,22 @@
 	sheet:Sheet {
 		//add new row
 		++-rowobject->blockheaderRow
-		
+		++-rowobject->extensionRow
+		++-rowobject->newExtensionRow
 		
 		
 		//existing elements
 		-rowobject->lastRow
-		/*
+		
 		 //add new cells
 		++-cell->cell_1
 		++-cell->cell_2
 		++-cell->cell_3
 		++-cell->cell_4
-		 -colobject->componentsColumn
+		-colobject->componentsColumn
 		-colobject->dependenciesColumn
 		-colobject->documentationColumn
-		-colobject->reviewColumn */
+		-colobject->reviewColumn
 	}
 }
 
@@ -116,10 +138,22 @@
 		#src->pluginFolder
 		#trg->blockheaderRow
 	}
+	
+	++extensionNodeToNewRowRule:ExtensionNodeToNewRowRelation{
+		#src->extensionNode
+		#trg->extensionRow
+	}
+	
+	++newExtensionNodeToNewRowRule:ExtensionNodeToNewRowRelation{
+		#src->newExtensionNode
+		#trg->newExtensionRow
+	}
 }
 
 #attributeConditions {
-	//eq_string(pluginFolder.name, cell_1.text)
+	eq_string(pluginFolder.name, cell_1.text)
+	eq_string(extensionRow.backgroundColor, extensionAttr.value)
+	eq_string(newExtensionRow.backgroundColor, newExtensionAttr.value)
 }
 
 
