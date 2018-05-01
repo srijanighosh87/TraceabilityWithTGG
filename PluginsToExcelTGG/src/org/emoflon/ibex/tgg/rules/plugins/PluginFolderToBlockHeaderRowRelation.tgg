@@ -4,12 +4,6 @@
 #rule PluginFolderToBlockHeaderRowRelation #with PluginsToExcelTGG
 
 #source {
-	xmlFolderDrive:Folder{
-		-subFolder->xmlFolder_1
-	}
-	xmlFolder_1:Folder{
-		-subFolder->xmlFolder_2
-	}
 	xmlFolder_2:Folder{
 		++-subFolder->pluginFolder
 	}
@@ -60,9 +54,9 @@
 	}
 	
 	//add connection to last row
-	lastRow:Row{
-		++-nextRow->blockheaderRow
-	}
+//	lastRow:Row{
+//		++-nextRow->blockheaderRow
+//	}
 	/* 
 	//add cells to existing column
 	componentsColumn:Column{
@@ -82,9 +76,9 @@
 	}
 	*/
 	
-	excelFile:File {
-		-sheet->sheet
-	}
+//	excelFile:File {
+//		-sheet->sheet
+//	}
 	sheet:Sheet {
 		//add new row
 		++-rowobject->blockheaderRow
@@ -92,7 +86,7 @@
 		
 		
 		//existing elements
-		-rowobject->lastRow
+//		-rowobject->lastRow
 		/*
 		 //add new cells
 		++-cell->cell_1
@@ -107,13 +101,13 @@
 }
 
 #correspondence {
-	xmlFolderToExcelFileRule:XMLFolderToExcelFileRelation{
+	xmlFolderToExcelFileRule:XMLFolderToSheetRelation{
 		#src->xmlFolder_2
-		#trg->excelFile
+		#trg->sheet
 	}
 	
-	++ pluginFolderToBlockHeaderRowRule:PluginFolderToExcelBlockHeaderRowRelation{
-		#src->pluginFolder
+	++ pluginNodeToRowRule:PluginNodeToRowRelation{
+		#src->pluginNode
 		#trg->blockheaderRow
 	}
 }

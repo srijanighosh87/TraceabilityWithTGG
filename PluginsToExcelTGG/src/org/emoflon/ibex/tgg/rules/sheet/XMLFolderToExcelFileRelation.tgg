@@ -1,0 +1,37 @@
+#using PluginsToExcelTGG.*
+#using AttrCondDefLibrary.*
+
+#rule XMLFolderToExcelFileRelation 
+#extends CreateSheetStructure 
+#with PluginsToExcelTGG
+
+#source {
+	++xmlFolderDrive:Folder{
+		++-subFolder->xmlFolder_1
+	}
+	++xmlFolder_1:Folder{
+		++-subFolder->xmlFolder_2
+	}
+	++xmlFolder_2:Folder
+}
+
+#target {	
+	++sheet:Sheet
+	
+	++excelFile:File {
+		fileName:="Workspace"
+		++-sheet -> sheet
+	}
+}
+
+#correspondence {
+	++xmlFolderToExcelFileRule:XMLFolderToSheetRelation{
+		#src-> xmlFolder_2
+		#trg->sheet
+	}
+}
+
+#attributeConditions {
+
+}
+

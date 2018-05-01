@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.log4j.BasicConfigurator;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.emoflon.ibex.tgg.compiler.patterns.PatternSuffixes;
 import org.emoflon.ibex.tgg.operational.csp.constraints.factories.UserDefinedRuntimeTGGAttrConstraintFactory;
 import org.emoflon.ibex.tgg.operational.defaults.IbexOptions;
 import org.emoflon.ibex.tgg.operational.strategies.sync.SYNC;
@@ -69,6 +70,13 @@ public class SYNC_App extends SYNC {
 		EcoreUtil.resolveAll(rs);
 	}
 
+	@Override
+	public boolean isPatternRelevantForCompiler(String patternName) {
+		if(fwd)
+			return patternName.endsWith(PatternSuffixes.FWD);
+		else
+			return patternName.endsWith(PatternSuffixes.BWD);
+	}
 	
 	protected void registerUserMetamodels() throws IOException {
 		_RegistrationHelper.registerMetamodels(rs, this);
@@ -81,7 +89,7 @@ public class SYNC_App extends SYNC {
 			IbexOptions options = new IbexOptions();
 			options.projectName("PluginsToExcelTGG");
 			options.projectPath("PluginsToExcelTGG");
-			options.debug(false);
+			options.debug(true);
 			options.userDefinedConstraints(new UserDefinedRuntimeTGGAttrConstraintFactory());
 			return options;
 	}

@@ -94,12 +94,12 @@
 }
 
 #correspondence {
-	++extensionNodeToNewRowRule:ExtensionNodeToNewRowRelation{
+	++extensionNodeToRowRule:ExtensionNodeToRowRelation{
 		#src->extensionNode
 		#trg->newRowForExtenstion
 	}
-	
-	extensionNodeToNewUnderBlockHeaderRowRule:ExtenstionNodeToNewRowRelation{
+//	
+	extensionNodeToOldRowRule:ExtensionNodeToRowRelation{
 		#src->extensionNodeOld
 		#trg->lastRow
 	}

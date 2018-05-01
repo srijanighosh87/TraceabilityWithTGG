@@ -14,13 +14,13 @@
 		-subFolder -> pluginFolder
 	} */
 
-	pluginFolder:Folder {
-		-file -> pluginXmlFile
-	}
-
-	pluginXmlFile:File {
-		-rootNode -> pluginNode
-	}
+//	pluginFolder:Folder {
+//		-file -> pluginXmlFile
+//	}
+//
+//	pluginXmlFile:File {
+//		-rootNode -> pluginNode
+//	}
 
 	pluginNode:Node {
 		++-children -> extensionNode
@@ -105,12 +105,12 @@
 		#trg->excelFile
 	}*/
 
-	pluginFolderToBlockHeaderRowRule:PluginFolderToExcelBlockHeaderRowRelation{
-		#src->pluginFolder
+	pluginFolderToBlockHeaderRowRule:PluginNodeToRowRelation{
+		#src->pluginNode
 		#trg->blockHeader
 	}
-
-	++extensionNodeToNewUnderBlockHeaderRowRule:ExtenstionNodeToNewRowRelation{
+//
+	++extensionNodeToRowRule:ExtensionNodeToRowRelation{
 		#src->extensionNode
 		#trg->newRowForExtenstion
 	}
@@ -118,7 +118,7 @@
 
 #attributeConditions {
 	//eq_string(extensionAttr.value, cell_2.text)
-	eq_string(newRowForExtenstion.backgroundColor, "Rule 1")
+//	eq_string(newRowForExtenstion.backgroundColor, "Rule 1")
 }
 
 

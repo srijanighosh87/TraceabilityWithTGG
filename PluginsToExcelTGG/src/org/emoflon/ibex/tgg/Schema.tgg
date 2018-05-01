@@ -12,32 +12,32 @@
 } 
 
 #correspondence {
-	SimpleTreeToSimpleExcelContainerRelation{
-		#src->Node
-		#trg->File
-	}
-	
-	XMLFolderToExcelFileRelation{
+//	SimpleTreeToSimpleExcelContainerRelation{
+//		#src->Node
+//		#trg->File
+//	}
+//	
+	XMLFolderToSheetRelation{
 		#src->Folder
-		#trg->File
+		#trg->Sheet
 	}
 	
-	PluginFolderToExcelBlockHeaderRowRelation {
-		#src->Simpletree.Folder
-		#trg->Simpleexcel.Row
-	}
-	
-	ExtenstionNodeToNewRowRelation{
+	PluginNodeToRowRelation {
 		#src->Node
 		#trg->Row
 	}
-	
-	ExtenstionNodeToNewRowUnderRowRelation{
-		#src->Node
-		#trg->Row
-	}
-	
-	ExtensionNodeToNewRowRelation{
+//	
+//	ExtenstionNodeToNewRowRelation{
+//		#src->Node
+//		#trg->Row
+//	}
+//	
+//	ExtenstionNodeToNewRowUnderRowRelation{
+//		#src->Node
+//		#trg->Row
+//	}
+//	
+	ExtensionNodeToRowRelation{
 		#src->Node
 		#trg->Row
 	}
