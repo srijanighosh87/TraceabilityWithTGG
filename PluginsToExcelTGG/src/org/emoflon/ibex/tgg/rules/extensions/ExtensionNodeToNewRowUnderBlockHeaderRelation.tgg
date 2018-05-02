@@ -21,7 +21,7 @@
 
 #target {
 	// create new cells for extension points
-	 ++cell_1:Cell{
+	++cell_1:Cell{
 		text:=""
 	}
 
@@ -67,7 +67,7 @@
 	sheet:Sheet {
 		++-rowobject -> newRowForExtenstion
 		-rowobject -> blockHeader
-		 ++-cell -> cell_1
+		++-cell -> cell_1
 		++-cell -> cell_2
 		++-cell -> cell_3
 		++-cell -> cell_4

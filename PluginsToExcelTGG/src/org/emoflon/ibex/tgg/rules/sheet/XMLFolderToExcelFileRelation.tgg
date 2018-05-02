@@ -12,7 +12,16 @@
 	++xmlFolder_1:Folder{
 		++-subFolder->xmlFolder_2
 	}
-	++xmlFolder_2:Folder
+	
+	++xmlFolder_2:Folder{
+		++-subFolder->xmlFolder_3
+	}
+	
+	++xmlFolder_3:Folder{
+		++-subFolder->xmlFolder_workspace
+	}
+	
+	++xmlFolder_workspace:Folder
 }
 
 #target {	
@@ -26,7 +35,7 @@
 
 #correspondence {
 	++xmlFolderToSheetRule:XMLFolderToSheetRelation{
-		#src-> xmlFolder_2
+		#src-> xmlFolder_workspace
 		#trg->sheet
 	}
 }
