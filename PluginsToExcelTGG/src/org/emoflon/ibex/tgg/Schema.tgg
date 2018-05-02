@@ -11,12 +11,7 @@
 	Simpleexcel
 } 
 
-#correspondence {
-//	SimpleTreeToSimpleExcelContainerRelation{
-//		#src->Node
-//		#trg->File
-//	}
-//	
+#correspondence {	
 	XMLFolderToSheetRelation{
 		#src->Folder
 		#trg->Sheet
@@ -26,17 +21,7 @@
 		#src->Node
 		#trg->Row
 	}
-//	
-//	ExtenstionNodeToNewRowRelation{
-//		#src->Node
-//		#trg->Row
-//	}
-//	
-//	ExtenstionNodeToNewRowUnderRowRelation{
-//		#src->Node
-//		#trg->Row
-//	}
-//	
+
 	ExtensionNodeToRowRelation{
 		#src->Node
 		#trg->Row

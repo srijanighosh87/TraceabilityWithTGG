@@ -4,17 +4,7 @@
 #rule ExtensionNodeToNewRowRelation #with PluginsToExcelTGG
 
 #source { 
-
-	/*pluginFolder:Folder {
-		-file -> pluginXmlFile
-	}
-
-	pluginXmlFile:File {
-		-rootNode -> pluginNode
-	} */
-
 	extensionNodeOld:Node{
-		//-attribute->extensionAttrOld
 	}
 
 	pluginNode:Node {
@@ -35,7 +25,7 @@
 
 #target {
 	// create new cells for extension points
-	/* ++cell_1:Cell{
+	++cell_1:Cell{
 		//text:=""
 	}
 
@@ -43,18 +33,18 @@
 
 	++cell_3:Cell
 
-	++cell_4:Cell */
+	++cell_4:Cell
 
 		// create new row for extension
 	++newRowForExtenstion:Row{
-		/*++-cell -> cell_1
+		++-cell -> cell_1
 		++-cell -> cell_2
 		++-cell -> cell_3
-		++-cell -> cell_4 */
+		++-cell -> cell_4
 	}
 
 		// add new cells to existing cols
-	/*componentsColumn:Column{
+	componentsColumn:Column{
 		++-cell -> cell_1
 		-nextColumn -> dependenciesColumn
 	}
@@ -72,7 +62,7 @@
 	reviewColumn:Column{
 		++-cell -> cell_4
 	}
-	*/
+	
 	lastRow:Row{
 		++-nextRow->newRowForExtenstion
 	}
@@ -81,14 +71,14 @@
 	sheet:Sheet {
 		++-rowobject -> newRowForExtenstion
 		-rowobject->lastRow
-		/* ++-cell -> cell_1
+		++-cell -> cell_1
 		++-cell -> cell_2
 		++-cell -> cell_3
 		++-cell -> cell_4
 		-colobject -> componentsColumn
 		-colobject -> dependenciesColumn
 		-colobject -> documentationColumn
-		-colobject -> reviewColumn */
+		-colobject -> reviewColumn
 	}
 
 }
@@ -98,7 +88,7 @@
 		#src->extensionNode
 		#trg->newRowForExtenstion
 	}
-//	
+	
 	extensionNodeToOldRowRule:ExtensionNodeToRowRelation{
 		#src->extensionNodeOld
 		#trg->lastRow
@@ -107,5 +97,6 @@
 }
 
 #attributeConditions {
-	//eq_string(extensionAttr.value, cell_2.text)
+	eq_string(extensionAttr.value, cell_2.text)
+	eq_string(newRowForExtenstion.backgroundColor, extensionAttr.value)
 }

@@ -25,7 +25,7 @@
 #target {
 	
 	//create cell for new row for every plugin.xml
-	/* ++cell_1:Cell{
+	++cell_1:Cell{
 		backgroundColor:="#FABF8F"
 		fontStyle:="bold"
 	}
@@ -44,20 +44,17 @@
 		backgroundColor:="#FABF8F"
 		fontStyle:="bold"
 	}
-	 */
+	
 	//create new row for file
 	++blockheaderRow:Row{
-		/* ++-cell->cell_1
+		++-cell->cell_1
 		++-cell->cell_2
 		++-cell->cell_3
-		++-cell->cell_4 */
+		++-cell->cell_4
 	}
 	
 	//add connection to last row
-//	lastRow:Row{
-//		++-nextRow->blockheaderRow
-//	}
-	/* 
+
 	//add cells to existing column
 	componentsColumn:Column{
 		++-cell->cell_1
@@ -74,20 +71,11 @@
 	reviewColumn:Column{
 		++-cell->cell_4
 	}
-	*/
 	
-//	excelFile:File {
-//		-sheet->sheet
-//	}
 	sheet:Sheet {
 		//add new row
 		++-rowobject->blockheaderRow
 		
-		
-		
-		//existing elements
-//		-rowobject->lastRow
-		/*
 		 //add new cells
 		++-cell->cell_1
 		++-cell->cell_2
@@ -96,7 +84,7 @@
 		 -colobject->componentsColumn
 		-colobject->dependenciesColumn
 		-colobject->documentationColumn
-		-colobject->reviewColumn */
+		-colobject->reviewColumn
 	}
 }
 
@@ -113,7 +101,8 @@
 }
 
 #attributeConditions {
-	//eq_string(pluginFolder.name, cell_1.text)
+	eq_string(pluginFolder.name, cell_1.text)
+	eq_string(blockheaderRow.backgroundColor, pluginFolder.name)
 }
 
 

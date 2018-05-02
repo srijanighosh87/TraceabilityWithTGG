@@ -4,23 +4,6 @@
 #rule ExtensionNodeToNewRowUnderBlockHeaderRelation #with PluginsToExcelTGG
 
 #source {
-	/*xmlFolderDrive:Folder{
-		-subFolder->xmlFolder_1
-	}
-	xmlFolder_1:Folder{
-		-subFolder->xmlFolder_2
-	}
-	xmlFolder_2:Folder{
-		-subFolder -> pluginFolder
-	} */
-
-//	pluginFolder:Folder {
-//		-file -> pluginXmlFile
-//	}
-//
-//	pluginXmlFile:File {
-//		-rootNode -> pluginNode
-//	}
 
 	pluginNode:Node {
 		++-children -> extensionNode
@@ -38,7 +21,7 @@
 
 #target {
 	// create new cells for extension points
-	/* ++cell_1:Cell{
+	 ++cell_1:Cell{
 		text:=""
 	}
 
@@ -47,17 +30,17 @@
 	++cell_3:Cell
 
 	++cell_4:Cell
-	*/
+	
 		// create new row for extension
 	++newRowForExtenstion:Row{
-		/* ++-cell -> cell_1
+		++-cell -> cell_1
 		++-cell -> cell_2
 		++-cell -> cell_3
-		++-cell -> cell_4*/
+		++-cell -> cell_4
 	}
 
 		// add new cells to existing cols
-	/*componentsColumn:Column{
+	componentsColumn:Column{
 		++-cell -> cell_1
 		-nextColumn -> dependenciesColumn
 	}
@@ -74,7 +57,7 @@
 
 	reviewColumn:Column{
 		++-cell -> cell_4
-	} */
+	}
 
 		// adding new row after block header
 	blockHeader:Row{
@@ -84,32 +67,24 @@
 	sheet:Sheet {
 		++-rowobject -> newRowForExtenstion
 		-rowobject -> blockHeader
-		/* ++-cell -> cell_1
+		 ++-cell -> cell_1
 		++-cell -> cell_2
 		++-cell -> cell_3
 		++-cell -> cell_4
 		-colobject -> componentsColumn
 		-colobject -> dependenciesColumn
 		-colobject -> documentationColumn
-		-colobject -> reviewColumn */
+		-colobject -> reviewColumn
 	}
-
-	/*excelFile:File {
-		-sheet -> sheet
-	}*/
 }
 
 #correspondence {
-	/*xmlFolderToExcelFileRule:XMLFolderToExcelFileRelation{
-		#src->xmlFolder_2
-		#trg->excelFile
-	}*/
 
 	pluginFolderToBlockHeaderRowRule:PluginNodeToRowRelation{
 		#src->pluginNode
 		#trg->blockHeader
 	}
-//
+
 	++extensionNodeToRowRule:ExtensionNodeToRowRelation{
 		#src->extensionNode
 		#trg->newRowForExtenstion
@@ -117,8 +92,8 @@
 }
 
 #attributeConditions {
-	//eq_string(extensionAttr.value, cell_2.text)
-//	eq_string(newRowForExtenstion.backgroundColor, "Rule 1")
+	eq_string(extensionAttr.value, cell_2.text)
+	eq_string(newRowForExtenstion.backgroundColor, extensionAttr.value)
 }
 
 

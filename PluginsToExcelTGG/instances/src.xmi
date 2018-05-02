@@ -1,46 +1,37 @@
 <?xml version="1.0" encoding="ASCII"?>
-<Simpletree:Folder
-    xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:Simpletree="platform:/resource/com.kaleidoscope.core.aux.simpletree/model/Simpletree.ecore"
-    name="C:">
-  <subFolder
-      name="Desktop">
-    <subFolder
-        name="My Workspace">
-      <subFolder
-          name="myPlugin 1">
-        <file
-            name="plugin.xml">
-          <rootNode
-              xsi:type="Simpletree:Node"
-              name="plugin">
-            <children
-                xsi:type="Simpletree:Node"
-                name="extension">
-              <attribute
-                  name="point"
-                  value="ext1"/>
+<Simpletree:Folder xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Simpletree="platform:/resource/com.kaleidoscope.core.aux.simpletree/model/Simpletree.ecore" name="C:">
+  <subFolder name="Desktop">
+    <subFolder name="My Workspace">
+      <subFolder name="myPlugin 1">
+        <file name="plugin.xml">
+          <rootNode xsi:type="Simpletree:Node" name="plugin">
+            <children xsi:type="Simpletree:Node" name="extension">
+              <attribute name="point" value="ext1_1"/>
+            </children>
+            <children xsi:type="Simpletree:Node" name="extension">
+              <attribute name="point" value="ext1_2"/>
             </children>
           </rootNode>
         </file>
       </subFolder>
-      <subFolder
-          name="myPlugin 2">
-        <file
-            name="plugin.xml">
-          <rootNode
-              xsi:type="Simpletree:Node"
-              name="plugin">
-            <children
-                xsi:type="Simpletree:Node"
-                name="extension">
-              <attribute
-                  name="point"
-                  value="ext2"/>
+      <subFolder name="myPlugin 2">
+        <file name="plugin.xml">
+          <rootNode xsi:type="Simpletree:Node" name="plugin">
+            <children xsi:type="Simpletree:Node" name="extension">
+              <attribute name="point" value="ext2_1"/>
+            </children>
+            <children xsi:type="Simpletree:Node" name="extension">
+              <attribute name="point" value="ext2_2"/>
+            </children>
+            <children xsi:type="Simpletree:Node" name="extension">
+              <attribute name="point" value="ext2_3"/>
             </children>
           </rootNode>
+        </file>
+      </subFolder>
+      <subFolder name="myPlugin 3">
+        <file name="plugin.xml">
+          <rootNode xsi:type="Simpletree:Node" name="plugin"/>
         </file>
       </subFolder>
     </subFolder>

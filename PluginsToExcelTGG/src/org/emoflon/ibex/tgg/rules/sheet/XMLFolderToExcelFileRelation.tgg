@@ -25,7 +25,7 @@
 }
 
 #correspondence {
-	++xmlFolderToExcelFileRule:XMLFolderToSheetRelation{
+	++xmlFolderToSheetRule:XMLFolderToSheetRelation{
 		#src-> xmlFolder_2
 		#trg->sheet
 	}

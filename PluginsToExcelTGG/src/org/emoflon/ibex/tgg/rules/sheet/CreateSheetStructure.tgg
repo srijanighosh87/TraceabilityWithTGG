@@ -8,37 +8,37 @@
 	++componentsCell:Cell{
 		text:="Components"
 		backgroundColor:="#00008B"
-//		fontColor:="#FFFFFF"
-//		fontSize:=16
-//		fontFamily:="Arial Narrow"
-//		fontStyle:="bold"
+		fontColor:="#FFFFFF"
+		fontSize:=16
+		fontFamily:="Arial Narrow"
+		fontStyle:="bold"
 	}
 
 	++dependenciesCell:Cell{
 		text:="Dependencies"
 		backgroundColor:="#00008B"
-//		fontColor:="#FFFFFF"
-//		fontSize:=16
-//		fontFamily:="Arial Narrow"
-//		fontStyle:="bold"
+		fontColor:="#FFFFFF"
+		fontSize:=16
+		fontFamily:="Arial Narrow"
+		fontStyle:="bold"
 	}
 
 	++documentationCell:Cell{
 		text:="Documentation"
 		backgroundColor:="#00008B"
-//		fontColor:="#FFFFFF"
-//		fontSize:=16
-//		fontFamily:="Arial Narrow"
-//		fontStyle:="bold"
+		fontColor:="#FFFFFF"
+		fontSize:=16
+		fontFamily:="Arial Narrow"
+		fontStyle:="bold"
 	}
 
 	++reviewCell:Cell{
 		text:="Review"
 		backgroundColor:="#00008B"
-//		fontColor:="#FFFFFF"
-//		fontSize:=16
-//		fontFamily:="Arial Narrow"
-//		fontStyle:="bold"
+		fontColor:="#FFFFFF"
+		fontSize:=16
+		fontFamily:="Arial Narrow"
+		fontStyle:="bold"
 	}
 
 		// create columns and add cells to it
