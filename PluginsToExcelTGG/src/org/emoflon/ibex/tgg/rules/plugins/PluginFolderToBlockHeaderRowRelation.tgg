@@ -105,8 +105,7 @@
 
 #attributeConditions {
 	eq_string(pluginFolder.name, cell_1.text)
-
-	eq_string(blockheaderRow.backgroundColor, pluginFolder.name)
+	//eq_string(blockheaderRow.backgroundColor, pluginFolder.name)
 }
 
 

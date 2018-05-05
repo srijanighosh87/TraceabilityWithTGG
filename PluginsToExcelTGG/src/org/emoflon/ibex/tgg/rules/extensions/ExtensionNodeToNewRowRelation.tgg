@@ -100,5 +100,5 @@
 
 #attributeConditions {
 	eq_string(extensionAttr.value, cell_2.text)
-	eq_string(newRowForExtenstion.backgroundColor, extensionAttr.value)
+	//eq_string(newRowForExtenstion.backgroundColor, extensionAttr.value)
 }
