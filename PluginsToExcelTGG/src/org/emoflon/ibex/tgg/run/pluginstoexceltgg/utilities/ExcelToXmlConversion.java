@@ -79,7 +79,7 @@ public class ExcelToXmlConversion {
 									if (xmlToExcelConversion.checkIfPluginHeader(cell_1, cell_2, cell_3, cell_4)) {
 
 										if (row.getPrevRow() != null) {
-											//System.out.println("Row : " + cell_1.getText());
+											// System.out.println("Row : " + cell_1.getText());
 											row.setPrevRow(null);
 										}
 									}
@@ -120,10 +120,10 @@ public class ExcelToXmlConversion {
 				if (rowList != null) {
 					for (int rowIndex = 1; rowIndex < rowList.size(); rowIndex++) {
 						Row currentRow = rowList.get(rowIndex);
-						/*System.out.println(
-								currentRow.getCell().get(0).getText() + " , " + currentRow.getCell().get(1).getText()
-										+ " :::: " + "prev : " + currentRow.getPrevRow());*/
-						if (currentRow.getPrevRow() == null && currentRow.getNextRow() == null) {
+						System.out.println(currentRow.getCell().get(0).getText() + " , "
+								+ currentRow.getCell().get(1).getText() + " :::: " + "prev : " + currentRow.getPrevRow()
+								+ " :::: next : " + currentRow.getNextRow());
+						if (checkPreviousOrNextRow(currentRow, "prev") && checkPreviousOrNextRow(currentRow, "next")) {
 							removeOnlyList.add(currentRow);
 						}
 					}
@@ -135,6 +135,59 @@ public class ExcelToXmlConversion {
 		}
 
 		System.out.println("pre-processing end...");
+	}
+
+	/**
+	 * @param currentRow
+	 * @param string 
+	 * @return
+	 */
+	private boolean checkPreviousOrNextRow(Row currentRow, String string) {
+		if(string.equalsIgnoreCase("prev")) {
+			if(currentRow.getPrevRow()==null) {
+				return true;
+			}
+			else {
+				Row prevRow = currentRow.getPrevRow();
+				if(prevRow.getCell().size()==0 && prevRow.getCell().size()<4) {
+					return true;
+				} else {
+					Cell cell_1 = prevRow.getCell().get(0);
+					Cell cell_2 = prevRow.getCell().get(1);
+					Cell cell_3 = prevRow.getCell().get(2);
+					Cell cell_4 = prevRow.getCell().get(3);
+					if(cell_1.getText()==null && cell_2.getText()==null && cell_3.getText()==null && cell_4.getText()==null) {
+						return true;
+					}
+					else
+						return false;
+				}
+			}
+		}
+		
+		if(string.equalsIgnoreCase("next")) {
+			if(currentRow.getNextRow()==null) {
+				return true;
+			}
+			else {
+				Row nextRow = currentRow.getNextRow();
+				if(nextRow.getCell().size()==0 && nextRow.getCell().size()<4) {
+					return true;
+				} else {
+					Cell cell_1 = nextRow.getCell().get(0);
+					Cell cell_2 = nextRow.getCell().get(1);
+					Cell cell_3 = nextRow.getCell().get(2);
+					Cell cell_4 = nextRow.getCell().get(3);
+					if(cell_1.getText()==null && cell_2.getText()==null && cell_3.getText()==null && cell_4.getText()==null) {
+						return true;
+					}
+					else
+						return false;
+				}
+			}
+		}
+		
+		return false;
 	}
 
 	/**
