@@ -7,28 +7,33 @@
 
 #source {
 	++xmlFolderDrive:Folder{
+		name:="C:"
 		++-subFolder->xmlFolder_1
 	}
 	++xmlFolder_1:Folder{
+		name:="Users"
 		++-subFolder->xmlFolder_2
 	}
 	
 	++xmlFolder_2:Folder{
+		name:="Srijani"
 		++-subFolder->xmlFolder_3
 	}
 	
 	++xmlFolder_3:Folder{
+		name:="Desktop"
 		++-subFolder->xmlFolder_workspace
 	}
 	
-	++xmlFolder_workspace:Folder
+	++xmlFolder_workspace:Folder{
+		name:="Workspace"
+	}
 }
 
 #target {	
 	++sheet:Sheet
 	
 	++excelFile:File {
-		fileName:="Workspace"
 		++-sheet -> sheet
 	}
 }
@@ -41,6 +46,6 @@
 }
 
 #attributeConditions {
-
+	eq_string(excelFile.fileName, xmlFolder_workspace.name)
 }
 
