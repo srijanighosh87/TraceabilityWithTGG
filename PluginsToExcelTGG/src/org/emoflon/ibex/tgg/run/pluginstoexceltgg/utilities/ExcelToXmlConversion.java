@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.log4j.BasicConfigurator;
+import org.emoflon.ibex.tgg.run.pluginstoexceltgg.SYNC_App;
 
 import com.kaleidoscope.core.auxiliary.xmi.artefactadapter.XMIArtefactAdapter;
 
@@ -34,9 +36,9 @@ public class ExcelToXmlConversion {
 		storeSimpleExcelModelToXMI(excelModel);
 
 		// call SYNC_APP
-		// BasicConfigurator.configure();
-		// SYNC_App sync = new SYNC_App(false);
-		// sync.executeSync(sync);
+		BasicConfigurator.configure();
+		SYNC_App sync = new SYNC_App(false);
+		sync.executeSync(sync);
 
 		// convert simpleExcelmodel to Excel artefact
 		// xmlToExcelConversionMainClass.convertSimpleExcelToExcel(excelElement);
@@ -66,17 +68,18 @@ public class ExcelToXmlConversion {
 							Cell cell_2 = cellList.get(1);
 							Cell cell_3 = cellList.get(2);
 							Cell cell_4 = cellList.get(3);
-
+							// if cells null
 							if (cell_1 != null && cell_2 != null && cell_3 != null && cell_4 != null) {
-
+								// if the row has only blank/empty cells
 								if (!(isOnlySpaceOrBlank(cell_1) && isOnlySpaceOrBlank(cell_2)
 										&& isOnlySpaceOrBlank(cell_3) && isOnlySpaceOrBlank(cell_4))) {
 
 									// check if Plugin-block-header : if yes, then remove connection to previous
 									// row.
 									if (xmlToExcelConversion.checkIfPluginHeader(cell_1, cell_2, cell_3, cell_4)) {
+
 										if (row.getPrevRow() != null) {
-											System.out.println("Row : " + cell_1.getText());
+											//System.out.println("Row : " + cell_1.getText());
 											row.setPrevRow(null);
 										}
 									}
@@ -93,6 +96,7 @@ public class ExcelToXmlConversion {
 
 				}
 			}
+
 			// create new connections and delete obsolete ones
 			for (Map.Entry<Row, Row> entry : newConnectionMap.entrySet()) {
 				Row prevRow = entry.getKey();
@@ -107,21 +111,49 @@ public class ExcelToXmlConversion {
 			}
 
 			// remove rows from removeOnlyList
-			if (removeOnlyList != null) {
-				for (Row removeRow : removeOnlyList) {
-					System.out.println();
-					removeRow.getPrevRow().setNextRow(null);
-					for (Cell cell : removeRow.getCell()) {
-						sheet.getCell().remove(cell);
+			removefromList(sheet);
+
+			// check all rows for plugin header with no extension
+			if (sheet != null) {
+				removeOnlyList.removeAll(removeOnlyList);
+				List<Row> rowList = sheet.getRowobject().size() > 0 ? sheet.getRowobject() : null;
+				if (rowList != null) {
+					for (int rowIndex = 1; rowIndex < rowList.size(); rowIndex++) {
+						Row currentRow = rowList.get(rowIndex);
+						/*System.out.println(
+								currentRow.getCell().get(0).getText() + " , " + currentRow.getCell().get(1).getText()
+										+ " :::: " + "prev : " + currentRow.getPrevRow());*/
+						if (currentRow.getPrevRow() == null && currentRow.getNextRow() == null) {
+							removeOnlyList.add(currentRow);
+						}
 					}
-					removeRow.getCell().removeAll(removeRow.getCell());
-					sheet.getRowobject().remove(removeRow);
 				}
 			}
+
+			removefromList(sheet);
 
 		}
 
 		System.out.println("pre-processing end...");
+	}
+
+	/**
+	 * @param sheet
+	 */
+	private void removefromList(Sheet sheet) {
+		if (removeOnlyList != null) {
+			for (Row removeRow : removeOnlyList) {
+				if (removeRow.getPrevRow() != null) {
+					removeRow.getPrevRow().setNextRow(null);
+				}
+				for (Cell cell : removeRow.getCell()) {
+					sheet.getCell().remove(cell);
+				}
+				removeRow.getCell().removeAll(removeRow.getCell());
+				sheet.getRowobject().remove(removeRow);
+
+			}
+		}
 	}
 
 	/**

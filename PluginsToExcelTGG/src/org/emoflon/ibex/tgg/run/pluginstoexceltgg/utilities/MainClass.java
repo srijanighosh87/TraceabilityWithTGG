@@ -9,12 +9,14 @@ public class MainClass {
 		CONVERSION_DIRECTION = false;
 		if(CONVERSION_DIRECTION) {
 			try {
+				System.out.println("Transforming Plugin Workspace to EXCEL");
 				new XmlToExcelConversion().convert();
 			} catch (IOException e) {
 				System.out.println("Some error occurred ...");
 			}
 		} else {
 			try {
+				System.out.println("Transforming EXCEL to Plugin Workspace");
 				new ExcelToXmlConversion().convert();
 			} catch (IOException e) {
 				System.out.println("Some error occurred ...");
