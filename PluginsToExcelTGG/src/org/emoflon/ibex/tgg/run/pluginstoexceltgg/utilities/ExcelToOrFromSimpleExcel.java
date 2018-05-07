@@ -31,9 +31,10 @@ public class ExcelToOrFromSimpleExcel {
 	 * 
 	 * @return
 	 */
-	public Optional<File> convertExcelToSimpleExcel() {
+	public Optional<File> convertExcelToSimpleExcel(String excelPath) {
 		// calling EXCELAdapter
-		Path path = Paths.get(CONSTANTS.EXCEL_PATH);
+		//Path path = Paths.get(CONSTANTS.EXCEL_PATH);
+		Path path = Paths.get(excelPath);
 		ExcelArtefactAdapter excelArtefactAdapter = new ExcelArtefactAdapter(path);
 		excelArtefactAdapter.parse();
 		storeSimpleExcelModelToXMI(excelArtefactAdapter);

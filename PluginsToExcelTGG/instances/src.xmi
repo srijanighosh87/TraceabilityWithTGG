@@ -10,34 +10,8 @@
                 <children xsi:type="Simpletree:Node" name="extension">
                   <attribute name="point" value="ext1_1"/>
                 </children>
-                <children xsi:type="Simpletree:Node" index="1" name="extension">
+                <children xsi:type="Simpletree:Node" name="extension">
                   <attribute name="point" value="ext1_2"/>
-                </children>
-              </rootNode>
-            </file>
-          </subFolder>
-          <subFolder name="plugin2">
-            <file name="plugin.xml">
-              <rootNode xsi:type="Simpletree:Node" name="plugin">
-                <children xsi:type="Simpletree:Node" name="extension">
-                  <attribute name="point" value="ext2_1"/>
-                </children>
-              </rootNode>
-            </file>
-          </subFolder>
-          <subFolder name="plugin3">
-            <file name="plugin.xml">
-              <rootNode xsi:type="Simpletree:Node" name="plugin"/>
-            </file>
-          </subFolder>
-          <subFolder name="plugin4">
-            <file name="plugin.xml">
-              <rootNode xsi:type="Simpletree:Node" name="plugin">
-                <children xsi:type="Simpletree:Node" name="extension">
-                  <attribute name="point" value="ext4_1"/>
-                </children>
-                <children xsi:type="Simpletree:Node" index="1" name="extension">
-                  <attribute name="point" value="ext4_2"/>
                 </children>
               </rootNode>
             </file>

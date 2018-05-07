@@ -11,6 +11,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.BasicConfigurator;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.emoflon.ibex.tgg.run.pluginstoexceltgg.SYNC_App;
 
 import com.kaleidoscope.core.auxiliary.xmi.artefactadapter.XMIArtefactAdapter;
@@ -20,19 +25,20 @@ import Simpleexcel.ExcelElement;
 import Simpleexcel.File;
 import Simpleexcel.Row;
 import Simpleexcel.Sheet;
+import Simpletree.TreeElement;
 
 public class ExcelToXmlConversion {
 	private HashMap<Row, Row> newConnectionMap = new HashMap<Row, Row>();
 	private List<Row> removeOnlyList = new ArrayList<Row>();
 
-	public void convert() throws IOException {
-		ExcelToXmlConversion xmlToExcelConversion = new ExcelToXmlConversion();
+	public void convert(String excelPath) throws IOException {
+		// ExcelToXmlConversion xmlToExcelConversion = new ExcelToXmlConversion();
 
 		// convert Excel artefact to SimpleExcelmodel
-		Optional<File> excelModel = xmlToExcelConversion.convertExcelToSimpleExcel();
+		Optional<File> excelModel = this.convertExcelToSimpleExcel(excelPath);
 
 		// pre-processing: disconnect the invalid row connections and save it as trg.xmi
-		xmlToExcelConversion.preProcessing(excelModel, xmlToExcelConversion);
+		this.preProcessing(excelModel, this);
 		storeSimpleExcelModelToXMI(excelModel);
 
 		// call SYNC_APP
@@ -40,8 +46,35 @@ public class ExcelToXmlConversion {
 		SYNC_App sync = new SYNC_App(false);
 		sync.executeSync(sync);
 
-		// convert simpleExcelmodel to Excel artefact
-		// xmlToExcelConversionMainClass.convertSimpleExcelToExcel(excelElement);
+		// read xmi file and convert simpleExcelmodel to Excel artefact
+		TreeElement simpleTreeModel = this.readXMIModel();
+		this.convertSimpleTreeToWorkspace(simpleTreeModel);
+	}
+
+	/**
+	 * Method for converting SimpleTree model to the entire workspace
+	 * 
+	 * @param simpleTreeModel
+	 */
+	private void convertSimpleTreeToWorkspace(TreeElement simpleTreeModel) {
+
+		XmlToOrFromSimpleTree xmlFromSimpleTree = new XmlToOrFromSimpleTree();
+		xmlFromSimpleTree.convertSimpleTreeToXml(simpleTreeModel);
+
+	}
+
+	/**
+	 * Reads src.xmi and returns the model
+	 * 
+	 * @return
+	 */
+	private TreeElement readXMIModel() {
+		ResourceSet rs = new ResourceSetImpl();
+		rs.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
+		Resource resource = rs.getResource(URI.createURI(CONSTANTS.SIMPLE_TREE_XMI_PATH), true);
+		TreeElement obj = (TreeElement) resource.getContents().get(0);
+
+		return obj;
 	}
 
 	/**
@@ -120,9 +153,11 @@ public class ExcelToXmlConversion {
 				if (rowList != null) {
 					for (int rowIndex = 1; rowIndex < rowList.size(); rowIndex++) {
 						Row currentRow = rowList.get(rowIndex);
-						System.out.println(currentRow.getCell().get(0).getText() + " , "
-								+ currentRow.getCell().get(1).getText() + " :::: " + "prev : " + currentRow.getPrevRow()
-								+ " :::: next : " + currentRow.getNextRow());
+						/*
+						 * System.out.println(currentRow.getCell().get(0).getText() + " , " +
+						 * currentRow.getCell().get(1).getText() + " :::: " + "prev : " +
+						 * currentRow.getPrevRow() + " :::: next : " + currentRow.getNextRow());
+						 */
 						if (checkPreviousOrNextRow(currentRow, "prev") && checkPreviousOrNextRow(currentRow, "next")) {
 							removeOnlyList.add(currentRow);
 						}
@@ -139,54 +174,52 @@ public class ExcelToXmlConversion {
 
 	/**
 	 * @param currentRow
-	 * @param string 
+	 * @param string
 	 * @return
 	 */
 	private boolean checkPreviousOrNextRow(Row currentRow, String string) {
-		if(string.equalsIgnoreCase("prev")) {
-			if(currentRow.getPrevRow()==null) {
+		if (string.equalsIgnoreCase("prev")) {
+			if (currentRow.getPrevRow() == null) {
 				return true;
-			}
-			else {
+			} else {
 				Row prevRow = currentRow.getPrevRow();
-				if(prevRow.getCell().size()==0 && prevRow.getCell().size()<4) {
+				if (prevRow.getCell().size() == 0 && prevRow.getCell().size() < 4) {
 					return true;
 				} else {
 					Cell cell_1 = prevRow.getCell().get(0);
 					Cell cell_2 = prevRow.getCell().get(1);
 					Cell cell_3 = prevRow.getCell().get(2);
 					Cell cell_4 = prevRow.getCell().get(3);
-					if(cell_1.getText()==null && cell_2.getText()==null && cell_3.getText()==null && cell_4.getText()==null) {
+					if (cell_1.getText() == null && cell_2.getText() == null && cell_3.getText() == null
+							&& cell_4.getText() == null) {
 						return true;
-					}
-					else
+					} else
 						return false;
 				}
 			}
 		}
-		
-		if(string.equalsIgnoreCase("next")) {
-			if(currentRow.getNextRow()==null) {
+
+		if (string.equalsIgnoreCase("next")) {
+			if (currentRow.getNextRow() == null) {
 				return true;
-			}
-			else {
+			} else {
 				Row nextRow = currentRow.getNextRow();
-				if(nextRow.getCell().size()==0 && nextRow.getCell().size()<4) {
+				if (nextRow.getCell().size() == 0 && nextRow.getCell().size() < 4) {
 					return true;
 				} else {
 					Cell cell_1 = nextRow.getCell().get(0);
 					Cell cell_2 = nextRow.getCell().get(1);
 					Cell cell_3 = nextRow.getCell().get(2);
 					Cell cell_4 = nextRow.getCell().get(3);
-					if(cell_1.getText()==null && cell_2.getText()==null && cell_3.getText()==null && cell_4.getText()==null) {
+					if (cell_1.getText() == null && cell_2.getText() == null && cell_3.getText() == null
+							&& cell_4.getText() == null) {
 						return true;
-					}
-					else
+					} else
 						return false;
 				}
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -285,9 +318,9 @@ public class ExcelToXmlConversion {
 	 * @return
 	 *
 	 */
-	private Optional<File> convertExcelToSimpleExcel() {
+	private Optional<File> convertExcelToSimpleExcel(String excelPath) {
 		ExcelToOrFromSimpleExcel excelToSimpleExcel = new ExcelToOrFromSimpleExcel();
-		return excelToSimpleExcel.convertExcelToSimpleExcel();
+		return excelToSimpleExcel.convertExcelToSimpleExcel(excelPath);
 	}
 
 	/**

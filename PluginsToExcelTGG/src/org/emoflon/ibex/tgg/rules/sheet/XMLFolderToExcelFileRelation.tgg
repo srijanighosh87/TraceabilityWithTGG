@@ -34,6 +34,8 @@
 	++sheet:Sheet
 	
 	++excelFile:File {
+		fileName:="Relationship.xlsx"
+		path:="C:\Users\Srijani\Desktop\Workspace"
 		++-sheet -> sheet
 	}
 }
@@ -46,6 +48,6 @@
 }
 
 #attributeConditions {
-	eq_string(excelFile.fileName, xmlFolder_workspace.name)
+	//eq_string(excelFile.fileName, xmlFolder_workspace.name)
 }
 

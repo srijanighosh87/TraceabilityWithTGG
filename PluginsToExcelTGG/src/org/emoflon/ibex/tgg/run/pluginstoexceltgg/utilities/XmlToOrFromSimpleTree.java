@@ -10,17 +10,17 @@ import com.kaleidoscope.core.auxiliary.xmi.artefactadapter.XMIArtefactAdapter;
 import Simpletree.TreeElement;
 
 public class XmlToOrFromSimpleTree {
-	
+
 	/**
 	 * METHOD FOR CONVERTING XML ARTEFACT TO SIMPLETREE MODEL
 	 */
-	public void convertXMLToSimpleTree() {
+	public void convertXMLToSimpleTree(String workspacePath) {
 		// calling XMLAdapter
-		Path path = Paths.get(CONSTANTS.INPUT_WORKSPACE_PATH);
+		Path path = Paths.get(workspacePath);
 		XMLArtefactAdapter xmlAdapter = new XMLArtefactAdapter(path);
 
 		// parse XML
-		System.out.println("Parsing XML file ...");
+		System.out.println("Parsing workspace ...");
 		xmlAdapter.parse();
 
 		// save it to src.xmi at path <generatedSimpleTreeModelPath>
@@ -43,6 +43,18 @@ public class XmlToOrFromSimpleTree {
 			xmiArtefactAdapter.unparse();
 		});
 		System.out.println("Parsing completed ...");
+	}
+
+	/**
+	 * @param simpleTreeModel
+	 */
+	public void convertSimpleTreeToXml(TreeElement treeElement) {
+		// calling XMLAdapter
+		Path path = Paths.get(CONSTANTS.INPUT_WORKSPACE_PATH);
+		XMLArtefactAdapter xmlArtefactAdapter = new XMLArtefactAdapter(path);
+		xmlArtefactAdapter.setModel(treeElement);
+		xmlArtefactAdapter.unparse();
+		System.out.println("WORKSPACE regenrated ...");
 	}
 
 }

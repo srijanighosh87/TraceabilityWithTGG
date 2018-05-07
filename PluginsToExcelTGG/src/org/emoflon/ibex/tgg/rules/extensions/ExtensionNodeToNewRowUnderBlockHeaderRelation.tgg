@@ -21,9 +21,10 @@
 
 #target {
 	// create new cells for extension points
-	++cell_1:Cell{
+	++cell_1:Cell
+	/*{
 		text:=""
-	}
+	} */
 
 	++cell_2:Cell
 
@@ -93,7 +94,6 @@
 
 #attributeConditions {
 	eq_string(extensionAttr.value, cell_2.text)
-	//eq_string(newRowForExtenstion.backgroundColor, extensionAttr.value)
 }
 
 

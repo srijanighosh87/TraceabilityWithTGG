@@ -30,11 +30,11 @@ public class XmlToExcelConversion {
 	public List<Row> pluginHeaderList = new ArrayList<Row>();
 	public List<Row> sortedPluginHeaderList = new ArrayList<Row>();
 
-	public void convert() throws IOException {
-		XmlToExcelConversion xmlToExcelConversionMainClass = new XmlToExcelConversion();
+	public void convert(String workspacePath) throws IOException {
+		//XmlToExcelConversion xmlToExcelConversionMainClass = new XmlToExcelConversion();
 
 		// convert XML artefact to Simpletreemodel and save it as src.xmi
-		xmlToExcelConversionMainClass.convertXMLToSimpleTree();
+		this.convertXMLToSimpleTree(workspacePath);
 
 		// call SYNC_APP
 		BasicConfigurator.configure();
@@ -42,11 +42,11 @@ public class XmlToExcelConversion {
 		sync.executeSync(sync);
 
 		// post processing
-		ExcelElement excelElement = xmlToExcelConversionMainClass.readXMIModel();
-		xmlToExcelConversionMainClass.postProcess(excelElement, xmlToExcelConversionMainClass);
+		ExcelElement excelElement = this.readXMIModel();
+		this.postProcess(excelElement, this);
 
 		// convert simpleExcelmodel to Excel artefact
-		xmlToExcelConversionMainClass.convertSimpleExcelToExcel(excelElement);
+		this.convertSimpleExcelToExcel(excelElement);
 	}
 
 	/**
@@ -189,9 +189,9 @@ public class XmlToExcelConversion {
 	/**
 	 * 
 	 */
-	private void convertXMLToSimpleTree() {
+	private void convertXMLToSimpleTree(String workspacePath) {
 		XmlToOrFromSimpleTree xmLtoSimpleTree = new XmlToOrFromSimpleTree();
-		xmLtoSimpleTree.convertXMLToSimpleTree();
+		xmLtoSimpleTree.convertXMLToSimpleTree(workspacePath);
 	}
 
 	/**
