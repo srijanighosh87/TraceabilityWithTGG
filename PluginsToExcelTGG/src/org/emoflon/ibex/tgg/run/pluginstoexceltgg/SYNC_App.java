@@ -2,6 +2,7 @@ package org.emoflon.ibex.tgg.run.pluginstoexceltgg;
 
 import java.io.IOException;
 
+import org.apache.log4j.BasicConfigurator;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.emoflon.ibex.tgg.compiler.patterns.PatternSuffixes;
 import org.emoflon.ibex.tgg.operational.csp.constraints.factories.UserDefinedRuntimeTGGAttrConstraintFactory;
@@ -18,11 +19,11 @@ public class SYNC_App extends SYNC {
 		registerBlackInterpreter(new DemoclesTGGEngine());
 	}
 
-/*	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException {
 		BasicConfigurator.configure();
-		SYNC_App sync = new SYNC_App(true);
-		sync.chooseTransformationDirection(sync);
-	}*/
+		SYNC_App sync = new SYNC_App(false);
+		sync.executeSync(sync);
+	}
 
 	public void executeSync(SYNC_App sync) throws IOException {
 		logger.info("Starting SYNC");
@@ -84,7 +85,13 @@ public class SYNC_App extends SYNC {
 		IbexOptions options = new IbexOptions();
 		options.projectName("PluginsToExcelTGG");
 		options.projectPath("PluginsToExcelTGG");
+		//change optimizers
+		options.minimumNumberOfEdgesToCreateEdgePatterns(5);
+		options.setCorrContextNodesAsLocalNodes(true); 
+		options.stronglyTypedEdgedPatterns(false);
+		
 		options.debug(true);
+		
 		options.userDefinedConstraints(new UserDefinedRuntimeTGGAttrConstraintFactory());
 		return options;
 	}

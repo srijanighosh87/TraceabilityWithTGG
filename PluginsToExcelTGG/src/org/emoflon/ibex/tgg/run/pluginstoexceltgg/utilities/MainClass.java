@@ -2,10 +2,14 @@ package org.emoflon.ibex.tgg.run.pluginstoexceltgg.utilities;
 
 import java.io.IOException;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 public class MainClass {
 	public static boolean CONVERSION_DIRECTION;
 
 	public static void main(String[] args) {
+		Logger.getRootLogger().setLevel(Level.DEBUG);
 		CONVERSION_DIRECTION = false;
 		if(CONVERSION_DIRECTION) {
 			try {

@@ -2,7 +2,8 @@ Manifest-Version: 1.0
 Bundle-SymbolicName: PluginsToExcelTGG;singleton:=true
 Bundle-Name: PluginsToExcelTGG
 Bundle-Version: 1.0
-Require-Bundle: org.apache.log4j,
+Require-Bundle: org.moflon.core.utilities;bundle-version="3.0.0",
+ org.apache.log4j,
  com.google.guava,
  org.sat4j.core,
  org.sat4j.pb,

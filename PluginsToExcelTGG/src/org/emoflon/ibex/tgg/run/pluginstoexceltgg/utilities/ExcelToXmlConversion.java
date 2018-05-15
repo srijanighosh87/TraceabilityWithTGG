@@ -42,9 +42,12 @@ public class ExcelToXmlConversion {
 		storeSimpleExcelModelToXMI(excelModel);
 
 		// call SYNC_APP
+		long startMilliSeconds = System.currentTimeMillis();
 		BasicConfigurator.configure();
 		SYNC_App sync = new SYNC_App(false);
 		sync.executeSync(sync);
+		long endMilliSeconds = System.currentTimeMillis();
+		System.out.println("time taken : " + (endMilliSeconds-startMilliSeconds));
 
 		// read xmi file and convert simpleExcelmodel to Excel artefact
 		TreeElement simpleTreeModel = this.readXMIModel();
