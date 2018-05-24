@@ -17,9 +17,9 @@ public class ExcelToOrFromSimpleExcel {
 	 * 
 	 * @param excelElement
 	 */
-	public void convertSimpleExcelToExcel(ExcelElement excelElement) {
+	public void convertSimpleExcelToExcel(ExcelElement excelElement, String excelPath) {
 		// calling EXCELAdapter
-		Path path = Paths.get(CONSTANTS.EXCEL_PATH);
+		Path path = Paths.get(excelPath);
 		ExcelArtefactAdapter excelArtefactAdapter = new ExcelArtefactAdapter(path);
 		excelArtefactAdapter.setModel((File) excelElement);
 		excelArtefactAdapter.unparse();

@@ -6,7 +6,7 @@
 #with PluginsToExcelTGG
 
 #source {
-	++xmlFolderDrive:Folder{
+ 	/* ++xmlFolderDrive:Folder{
 		name:="C:"
 		++-subFolder->xmlFolder_1
 	}
@@ -25,9 +25,11 @@
 		++-subFolder->xmlFolder_workspace
 	}
 	
+	 */
+	
 	++xmlFolder_workspace:Folder{
-		name:="Workspace"
-	}
+		//name:="Workspace"
+	} 
 }
 
 #target {	
@@ -35,7 +37,8 @@
 	
 	++excelFile:File {
 		fileName:="Relationship.xlsx"
-		path:="C:\Users\Srijani\Desktop\Workspace"
+		//path:="C:\Users\Srijani\Desktop\Workspace"
+		//path:="Workspace"
 		++-sheet -> sheet
 	}
 }

@@ -25,13 +25,16 @@ import Simpleexcel.Row;
 import Simpleexcel.Sheet;
 
 public class XmlToExcelConversion {
-	
+
 	public HashMap<Row, List<Row>> pluginBlockMap = new HashMap<Row, List<Row>>();
 	public List<Row> pluginHeaderList = new ArrayList<Row>();
 	public List<Row> sortedPluginHeaderList = new ArrayList<Row>();
+	private String excelPath = "";
 
-	public void convert(String workspacePath) throws IOException {
-		//XmlToExcelConversion xmlToExcelConversionMainClass = new XmlToExcelConversion();
+	public void convert(String workspacePath, String excelGenerationPath) throws IOException {
+		this.excelPath = excelGenerationPath;
+		// XmlToExcelConversion xmlToExcelConversionMainClass = new
+		// XmlToExcelConversion();
 
 		// convert XML artefact to Simpletreemodel and save it as src.xmi
 		this.convertXMLToSimpleTree(workspacePath);
@@ -56,7 +59,7 @@ public class XmlToExcelConversion {
 	 */
 	private void postProcess(ExcelElement excelElement, XmlToExcelConversion xmlToExcelConversionMainClass) {
 		System.out.println("Starting post-processing ... ");
-		//System.out.println(excelElement);
+		// System.out.println(excelElement);
 
 		File file = (File) excelElement;
 		Sheet sheet = file.getSheet().size() > 0 ? file.getSheet().get(0) : null;
@@ -96,8 +99,6 @@ public class XmlToExcelConversion {
 						Row lastExtenstionRowForThisHeader = extensionList.get(extensionList.size() - 1);
 						if (sortedPluginHeaderList.size() > (i + 1)) {
 							lastExtenstionRowForThisHeader.setNextRow(sortedPluginHeaderList.get(i + 1));
-							System.out.println("connectiong " + lastExtenstionRowForThisHeader.getBackgroundColor()
-									+ " to " + lastExtenstionRowForThisHeader.getNextRow().getBackgroundColor());
 						}
 					}
 
@@ -133,15 +134,7 @@ public class XmlToExcelConversion {
 				sortedPluginHeaderList.add(pluginHeaderRow);
 			} else {
 				List<Cell> headerCells = pluginHeaderRow.getCell();
-				if (!headerCells.get(0).getText().equalsIgnoreCase("")
-						&& headerCells.get(1).getText().equalsIgnoreCase("")
-						&& headerCells.get(2).getText().equalsIgnoreCase("")
-						&& headerCells.get(3).getText().equalsIgnoreCase("")) {// this condition removes plugin header
-																				// from the model which doesn't have any
-																				// extensions
-					Sheet sheet = pluginHeaderRow.getSheet();
-					sheet.getRowobject().remove(pluginHeaderRow);
-				}
+				checkIfPluginWithNoExtenstion(headerCells, pluginHeaderRow);
 			}
 		}
 
@@ -151,6 +144,30 @@ public class XmlToExcelConversion {
 		}
 
 		System.out.println();
+	}
+
+	/**
+	 * this condition removes plug-in header from the model which doesn't have any
+	 * extensions
+	 * 
+	 * @param headerCells
+	 * @param pluginHeaderRow
+	 */
+	private void checkIfPluginWithNoExtenstion(List<Cell> headerCells, Row pluginHeaderRow) {
+		if (headerCells.get(0) != null && headerCells.get(0).getText() != null) {
+			if (!headerCells.get(0).getText().equalsIgnoreCase("")
+					&& (headerCells.get(1) == null || headerCells.get(1).getText() == null
+							|| headerCells.get(1).getText().equalsIgnoreCase(""))
+					&& (headerCells.get(2) == null || headerCells.get(2).getText() == null
+							|| headerCells.get(2).getText().equalsIgnoreCase(""))
+					&& (headerCells.get(3) == null || headerCells.get(3).getText() == null
+							|| headerCells.get(3).getText().equalsIgnoreCase(""))) {
+
+				Sheet sheet = pluginHeaderRow.getSheet();
+				sheet.getRowobject().remove(pluginHeaderRow);
+			}
+		}
+
 	}
 
 	/**
@@ -165,7 +182,7 @@ public class XmlToExcelConversion {
 			XmlToExcelConversion xmlToExcelConversionMainClass) {
 
 		XMIArtefactAdapter<ExcelElement> xmiArtefactAdapter = new XMIArtefactAdapter<ExcelElement>(
-				Paths.get("./Resources/postProcessedExcel/trg_new.xmi"));
+				Paths.get("./Resources/postProcessedExcel/trg_processed.xmi"));
 		xmiArtefactAdapter.setModel(excelElement);
 		xmiArtefactAdapter.unparse();
 
@@ -199,7 +216,7 @@ public class XmlToExcelConversion {
 	 */
 	private void convertSimpleExcelToExcel(ExcelElement excelElement) {
 		ExcelToOrFromSimpleExcel simpleExcelToExcel = new ExcelToOrFromSimpleExcel();
-		simpleExcelToExcel.convertSimpleExcelToExcel(excelElement);
+		simpleExcelToExcel.convertSimpleExcelToExcel(excelElement, excelPath);
 	}
 
 }
