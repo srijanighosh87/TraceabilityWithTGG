@@ -9,6 +9,8 @@ public class MainClass {
 	public static boolean CONVERSION_DIRECTION;
 
 	public static void main(String[] args) {
+
+		System.out.println("New project");
 		Logger.getRootLogger().setLevel(Level.DEBUG);
 
 		// true: XML_TO_EXCEL; false:EXCEL_TO_XML
@@ -25,7 +27,8 @@ public class MainClass {
 		} else {
 			try {
 				System.out.println("Transforming EXCEL to Plugin Workspace");
-				new ExcelToXmlConversion().convert(CONSTANTS.EXCEL_PATH);
+				new ExcelToXmlConversion().convert("C:\\Users\\Srijani\\Desktop\\Workspace\\Relationship.xlsx",
+						"C:\\Users\\Srijani\\Desktop\\HelloWorld\\");
 			} catch (IOException e) {
 				System.out.println("Some error occurred ...");
 			}

@@ -7,7 +7,9 @@ import java.util.Optional;
 import com.kaleidoscope.core.auxiliary.simpletree.artefactadapter.XML.XMLArtefactAdapter;
 import com.kaleidoscope.core.auxiliary.xmi.artefactadapter.XMIArtefactAdapter;
 
+import Simpletree.Folder;
 import Simpletree.TreeElement;
+import Simpletree.impl.FolderImpl;
 
 public class XmlToOrFromSimpleTree {
 
@@ -46,13 +48,18 @@ public class XmlToOrFromSimpleTree {
 	}
 
 	/**
+	 * @param workspacePath 
 	 * @param simpleTreeModel
 	 */
-	public void convertSimpleTreeToXml(TreeElement treeElement) {
+	public void convertSimpleTreeToXml(TreeElement treeElement, String workspacePath) {
 		// calling XMLAdapter
-		Path path = Paths.get(CONSTANTS.INPUT_WORKSPACE_PATH);
+		Path path = Paths.get(workspacePath);
 		XMLArtefactAdapter xmlArtefactAdapter = new XMLArtefactAdapter(path);
 		xmlArtefactAdapter.setModel(treeElement);
+		if(xmlArtefactAdapter.getModel().get() instanceof FolderImpl) {
+			String workspaceName = ((Folder)xmlArtefactAdapter.getModel().get()).getName();
+			((Folder)xmlArtefactAdapter.getModel().get()).setName(workspacePath+workspaceName);
+		}
 		xmlArtefactAdapter.unparse();
 		System.out.println("WORKSPACE regenrated ...");
 	}
