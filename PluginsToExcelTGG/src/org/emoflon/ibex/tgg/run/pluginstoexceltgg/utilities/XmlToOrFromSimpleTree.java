@@ -58,7 +58,10 @@ public class XmlToOrFromSimpleTree {
 		xmlArtefactAdapter.setModel(treeElement);
 		if(xmlArtefactAdapter.getModel().get() instanceof FolderImpl) {
 			String workspaceName = ((Folder)xmlArtefactAdapter.getModel().get()).getName();
-			((Folder)xmlArtefactAdapter.getModel().get()).setName(workspacePath+workspaceName);
+			if(workspaceName!=null && !workspaceName.equalsIgnoreCase(""))
+				((Folder)xmlArtefactAdapter.getModel().get()).setName(workspacePath+workspaceName);
+			else
+				((Folder)xmlArtefactAdapter.getModel().get()).setName(workspacePath);
 		}
 		xmlArtefactAdapter.unparse();
 		System.out.println("WORKSPACE regenrated ...");
