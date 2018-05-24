@@ -198,9 +198,13 @@ public class XmlToExcelConversion {
 		ResourceSet rs = new ResourceSetImpl();
 		rs.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
 		Resource resource = rs.getResource(URI.createURI(CONSTANTS.SIMPLE_EXCEL_XMI_PATH), true);
-		ExcelElement obj = (ExcelElement) resource.getContents().get(0);
-
-		return obj;
+		try {
+			ExcelElement obj = (ExcelElement) resource.getContents().get(0);
+			return obj;
+		} catch (Exception e) {
+			System.out.println("ERROR :: "+ e);
+		}
+		return null;
 	}
 
 	/**
