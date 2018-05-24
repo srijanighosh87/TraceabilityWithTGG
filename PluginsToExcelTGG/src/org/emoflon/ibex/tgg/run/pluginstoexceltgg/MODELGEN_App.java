@@ -41,7 +41,7 @@ public class MODELGEN_App extends MODELGEN {
 		_RegistrationHelper.registerMetamodels(rs, this);
 			
 		// Register correspondence metamodel last
-		loadAndRegisterMetamodel(projectPath + "/model/" + projectPath + ".ecore");
+		loadAndRegisterMetamodel(options.projectPath() + "/model/" + options.projectPath() + ".ecore");
 	}
 	
 	private static IbexOptions createIbexOptions() {

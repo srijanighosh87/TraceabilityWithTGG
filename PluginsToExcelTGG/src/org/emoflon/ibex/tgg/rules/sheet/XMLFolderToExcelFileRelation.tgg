@@ -6,7 +6,7 @@
 #with PluginsToExcelTGG
 
 #source {
- 	 ++xmlFolderDrive:Folder{
+ 	 /*  ++xmlFolderDrive:Folder{
 		name:="C:"
 		++-subFolder->xmlFolder_1
 	}
@@ -19,15 +19,15 @@
 		name:="Srijani"
 		++-subFolder->xmlFolder_3
 	}
-	
+	 
 	++xmlFolder_3:Folder{
 		name:="Desktop"
 		++-subFolder->xmlFolder_workspace
-	}
+	}  */
 	
-	++xmlFolder_workspace:Folder{
-		name:="Workspace"
-	} 
+	++xmlFolder_workspace:Folder //{
+		//name:="Workspace"
+	//} 
 }
 
 #target {	

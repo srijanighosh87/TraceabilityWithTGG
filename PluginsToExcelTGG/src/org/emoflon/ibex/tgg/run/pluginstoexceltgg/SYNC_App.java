@@ -53,15 +53,15 @@ public class SYNC_App extends SYNC {
 	@Override
 	public void loadModels() throws IOException {
 		if (fwd) {
-			s = loadResource(projectPath + "/instances/src.xmi");
-			t = createResource(projectPath + "/instances/trg.xmi");
+			s = loadResource(options.projectPath() + "/instances/src.xmi");
+			t = createResource(options.projectPath() + "/instances/trg.xmi");
 		} else {
-			t = loadResource(projectPath + "/instances/trg.xmi");
-			s = createResource(projectPath + "/instances/src.xmi");
+			t = loadResource(options.projectPath() + "/instances/trg.xmi");
+			s = createResource(options.projectPath() + "/instances/src.xmi");
 		}
 
-		c = createResource(projectPath + "/instances/corr.xmi");
-		p = createResource(projectPath + "/instances/protocol.xmi");
+		c = createResource(options.projectPath() + "/instances/corr.xmi");
+		p = createResource(options.projectPath() + "/instances/protocol.xmi");
 
 		EcoreUtil.resolveAll(rs);
 	}
@@ -78,13 +78,14 @@ public class SYNC_App extends SYNC {
 		_RegistrationHelper.registerMetamodels(rs, this);
 
 		// Register correspondence metamodel last
-		loadAndRegisterMetamodel(projectPath + "/model/" + projectPath + ".ecore");
+		loadAndRegisterMetamodel(options.projectPath() + "/model/" + options.projectPath() + ".ecore");
 	}
 
 	private static IbexOptions createIbexOptions() {
 		IbexOptions options = new IbexOptions();
 		options.projectName("PluginsToExcelTGG");
 		options.projectPath("PluginsToExcelTGG");
+		
 		//change optimizers
 		options.minimumNumberOfEdgesToCreateEdgePatterns(5);
 		options.setCorrContextNodesAsLocalNodes(true); 

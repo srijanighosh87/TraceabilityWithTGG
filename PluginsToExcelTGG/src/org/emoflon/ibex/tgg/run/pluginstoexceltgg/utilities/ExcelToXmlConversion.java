@@ -30,8 +30,11 @@ import Simpletree.TreeElement;
 public class ExcelToXmlConversion {
 	private HashMap<Row, Row> newConnectionMap = new HashMap<Row, Row>();
 	private List<Row> removeOnlyList = new ArrayList<Row>();
+	private String workspacePath = "";
 
-	public void convert(String excelPath) throws IOException {
+	public void convert(String excelPath, String workspacePath) throws IOException {
+		
+		this.workspacePath= workspacePath;
 		// ExcelToXmlConversion xmlToExcelConversion = new ExcelToXmlConversion();
 
 		// convert Excel artefact to SimpleExcelmodel
@@ -62,7 +65,7 @@ public class ExcelToXmlConversion {
 	private void convertSimpleTreeToWorkspace(TreeElement simpleTreeModel) {
 
 		XmlToOrFromSimpleTree xmlFromSimpleTree = new XmlToOrFromSimpleTree();
-		xmlFromSimpleTree.convertSimpleTreeToXml(simpleTreeModel);
+		xmlFromSimpleTree.convertSimpleTreeToXml(simpleTreeModel, workspacePath);
 
 	}
 

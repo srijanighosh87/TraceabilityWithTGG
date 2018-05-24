@@ -14,7 +14,7 @@ public class MainClass {
 		Logger.getRootLogger().setLevel(Level.DEBUG);
 
 		// true: XML_TO_EXCEL; false:EXCEL_TO_XML
-		CONVERSION_DIRECTION = true;
+		CONVERSION_DIRECTION = false;
 
 		if (CONVERSION_DIRECTION) {
 			try {
@@ -28,7 +28,7 @@ public class MainClass {
 			try {
 				System.out.println("Transforming EXCEL to Plugin Workspace");
 				new ExcelToXmlConversion().convert("C:\\Users\\Srijani\\Desktop\\Workspace\\Relationship.xlsx",
-						"C:\\Users\\Srijani\\Desktop\\HelloWorld\\");
+						"C:\\Users\\Srijani\\Desktop\\HelloWorld\\Workspace");
 			} catch (IOException e) {
 				System.out.println("Some error occurred ...");
 			}

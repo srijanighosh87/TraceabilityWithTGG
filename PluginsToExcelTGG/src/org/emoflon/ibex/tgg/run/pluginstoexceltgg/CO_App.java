@@ -36,7 +36,7 @@ public class CO_App extends CO {
 		_RegistrationHelper.registerMetamodels(rs, this);
 			
 		// Register correspondence metamodel last
-		loadAndRegisterMetamodel(projectPath + "/model/" + projectPath + ".ecore");
+		loadAndRegisterMetamodel(options.projectPath() + "/model/" + options.projectPath() + ".ecore");
 	}
 	
 	private static IbexOptions createIbexOptions() {
