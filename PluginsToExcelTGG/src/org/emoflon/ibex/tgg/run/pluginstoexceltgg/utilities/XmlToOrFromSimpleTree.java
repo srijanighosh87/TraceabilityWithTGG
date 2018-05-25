@@ -9,6 +9,8 @@ import java.util.regex.Pattern;
 import com.kaleidoscope.core.auxiliary.simpletree.artefactadapter.XML.XMLArtefactAdapter;
 import com.kaleidoscope.core.auxiliary.xmi.artefactadapter.XMIArtefactAdapter;
 
+import Simpleexcel.ExcelElement;
+import Simpleexcel.File;
 import Simpletree.Folder;
 import Simpletree.TreeElement;
 import Simpletree.impl.FolderImpl;
@@ -17,8 +19,9 @@ public class XmlToOrFromSimpleTree {
 
 	/**
 	 * METHOD FOR CONVERTING XML ARTEFACT TO SIMPLETREE MODEL
+	 * @return 
 	 */
-	public void convertXMLToSimpleTree(String workspacePath) {
+	public Optional<TreeElement> convertXMLToSimpleTree(String workspacePath) {
 		// calling XMLAdapter
 		Path path = Paths.get(workspacePath);
 		XMLArtefactAdapter xmlAdapter = new XMLArtefactAdapter(path);
@@ -28,8 +31,9 @@ public class XmlToOrFromSimpleTree {
 		xmlAdapter.parse();
 
 		// save it to src.xmi at path <generatedSimpleTreeModelPath>
-		storeSimpleTreeModelToXMI(xmlAdapter);
+		//storeSimpleTreeModelToXMI(xmlAdapter);
 
+		return xmlAdapter.getModel();
 	}
 
 	/**

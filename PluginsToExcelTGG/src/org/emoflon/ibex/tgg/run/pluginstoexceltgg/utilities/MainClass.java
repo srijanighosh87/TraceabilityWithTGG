@@ -14,14 +14,14 @@ public class MainClass {
 		Logger.getRootLogger().setLevel(Level.DEBUG);
 
 		// true: XML_TO_EXCEL; false:EXCEL_TO_XML
-		CONVERSION_DIRECTION = false;
+		CONVERSION_DIRECTION = true;
 
 		if (CONVERSION_DIRECTION) {
 			try {
 				System.out.println("Transforming Plugin Workspace to EXCEL");
-				new XmlToExcelConversion().convert("C:\\Users\\Srijani\\Desktop\\Workspace",
+				new XmlToExcelConversion().convert("C:\\Users\\Srijani\\Desktop\\Master_thesis_code_test",
 						"C:\\Users\\Srijani\\Desktop\\Master_thesis_code_test\\Relationship.xlsx");
-			} catch (IOException e) {
+			} catch (Exception e) {
 				System.out.println("Some error occurred ..." + e);
 			}
 		} else {
