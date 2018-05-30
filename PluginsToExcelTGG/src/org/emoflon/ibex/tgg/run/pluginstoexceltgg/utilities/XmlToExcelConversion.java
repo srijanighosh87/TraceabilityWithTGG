@@ -1,5 +1,6 @@
 package org.emoflon.ibex.tgg.run.pluginstoexceltgg.utilities;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +38,8 @@ public class XmlToExcelConversion {
 	private String excelPath = "";
 	private String workspacePath;
 	private Optional<TreeElement> simpleTreeOptionalModel ;
+	
+	private ExcelElement simpleExcelModel = null;
 
 	public void convert(String workspacePath, String excelGenerationPath) throws Exception {
 		this.excelPath = excelGenerationPath;
@@ -44,21 +47,37 @@ public class XmlToExcelConversion {
 		// convert XML artefact to Simpletreemodel
 		simpleTreeOptionalModel = this.convertXMLToSimpleTree(workspacePath);
 
-		// pre-processing
-		this.workspacePath = this.preProcessing();
-		storeSimpleTreeModelToXMI(simpleTreeOptionalModel);
+		// pre-processing with SimpleTreeModel
+		//this.workspacePath = this.preProcessing();
+		//storeSimpleTreeModelToXMI(simpleTreeOptionalModel);
 
 		// call SYNC_APP
+		long startMilliSeconds = System.currentTimeMillis();
 		BasicConfigurator.configure();
-		SYNC_App sync = new SYNC_App(true);
-		sync.executeSync(sync);
+		simpleTreeOptionalModel.ifPresent(xml ->{
+			SYNC_App sync;
+			try {
+				sync = new SYNC_App(true, xml);
+				sync.forward();
+				sync.terminate();
+				
+				//set model in local variable
+				simpleExcelModel = (ExcelElement) sync.getTargetResource().getContents().get(0);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+		long endMilliSeconds = System.currentTimeMillis();
+		System.out.println("time taken : " + (endMilliSeconds-startMilliSeconds));
 
-		// post processing
-		ExcelElement excelElement = this.readSimpleExcelXMIModel();
-		this.postProcess(excelElement, this);
+		
+		// post processing with SimpleExcel Mode
+	//	ExcelElement excelElement = this.readSimpleExcelXMIModel();
+		this.postProcess(simpleExcelModel, this);
 
 		// convert simpleExcelmodel to Excel artefact
-		this.convertSimpleExcelToExcel(excelElement);
+		this.convertSimpleExcelToExcel(simpleExcelModel);
 	}
 
 	/**
@@ -265,7 +284,7 @@ public class XmlToExcelConversion {
 	 * 
 	 * @return
 	 */
-	private ExcelElement readSimpleExcelXMIModel() {
+/*	private ExcelElement readSimpleExcelXMIModel() {
 		ResourceSet rs = new ResourceSetImpl();
 		rs.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
 		Resource resource = rs.getResource(URI.createURI(CONSTANTS.SIMPLE_EXCEL_XMI_PATH), true);
@@ -276,14 +295,14 @@ public class XmlToExcelConversion {
 			System.out.println("ERROR :: " + e);
 		}
 		return null;
-	}
+	}*/
 
 	/**
 	 * reads xmi for SimpleTree and stores in model
 	 * 
 	 * @return
 	 */
-	private TreeElement readSimpleTreeXMIModel() {
+/*	private TreeElement readSimpleTreeXMIModel() {
 		ResourceSet rs = new ResourceSetImpl();
 		rs.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
 		Resource resource = rs.getResource(URI.createURI(CONSTANTS.SIMPLE_TREE_XMI_PATH), true);
@@ -294,7 +313,7 @@ public class XmlToExcelConversion {
 			System.out.println("ERROR :: " + e);
 		}
 		return null;
-	}
+	}*/
 
 	/**
 	 * @return
@@ -321,7 +340,7 @@ public class XmlToExcelConversion {
 	 * 
 	 * @param excelArtefactAdapter
 	 */
-	public void storeSimpleTreeModelToXMI(Optional<TreeElement> model) {
+/*	public void storeSimpleTreeModelToXMI(Optional<TreeElement> model) {
 		model.ifPresent(m -> {
 			XMIArtefactAdapter<TreeElement> xmiArtefactAdapter = new XMIArtefactAdapter<TreeElement>(
 					Paths.get(CONSTANTS.SIMPLE_TREE_XMI_PATH));
@@ -330,5 +349,5 @@ public class XmlToExcelConversion {
 		});
 		System.out.println("Parsing completed ...");
 	}
-
+*/
 }

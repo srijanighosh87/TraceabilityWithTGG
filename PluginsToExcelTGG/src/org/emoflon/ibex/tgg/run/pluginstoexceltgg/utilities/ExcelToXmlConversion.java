@@ -31,12 +31,11 @@ public class ExcelToXmlConversion {
 	private HashMap<Row, Row> newConnectionMap = new HashMap<Row, Row>();
 	private List<Row> removeOnlyList = new ArrayList<Row>();
 	private String workspacePath = "";
+	private TreeElement simpleTreeModel = null;
 
 	public void convert(String excelPath, String workspacePath) throws IOException {
-		
 		this.workspacePath= workspacePath;
-		// ExcelToXmlConversion xmlToExcelConversion = new ExcelToXmlConversion();
-
+		
 		// convert Excel artefact to SimpleExcelmodel
 		Optional<File> excelModel = this.convertExcelToSimpleExcel(excelPath);
 
@@ -47,13 +46,25 @@ public class ExcelToXmlConversion {
 		// call SYNC_APP
 		long startMilliSeconds = System.currentTimeMillis();
 		BasicConfigurator.configure();
-		SYNC_App sync = new SYNC_App(false);
-		sync.executeSync(sync);
+		excelModel.ifPresent(excel ->{
+			try {
+				SYNC_App sync = new SYNC_App(false, excel);
+				sync.backward();
+				sync.terminate();
+				//set model in local variable
+				simpleTreeModel = (TreeElement) sync.getSourceResource().getContents().get(0);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		});
+		
+		
 		long endMilliSeconds = System.currentTimeMillis();
 		System.out.println("time taken : " + (endMilliSeconds-startMilliSeconds));
 
 		// read xmi file and convert simpleExcelmodel to Excel artefact
-		TreeElement simpleTreeModel = this.readXMIModel();
 		this.convertSimpleTreeToWorkspace(simpleTreeModel);
 	}
 
@@ -69,11 +80,11 @@ public class ExcelToXmlConversion {
 
 	}
 
-	/**
+/*	*//**
 	 * Reads src.xmi and returns the model
 	 * 
 	 * @return
-	 */
+	 *//*
 	private TreeElement readXMIModel() {
 		ResourceSet rs = new ResourceSetImpl();
 		rs.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
@@ -82,7 +93,7 @@ public class ExcelToXmlConversion {
 
 		return obj;
 	}
-
+*/
 	/**
 	 * This method processes existing excel model and make it TGG compatible.
 	 * 
@@ -329,13 +340,11 @@ public class ExcelToXmlConversion {
 		return excelToSimpleExcel.convertExcelToSimpleExcel(excelPath);
 	}
 
+
 	/**
 	 * This method stores SimpleExcel Model to .xmi in an intermediate path before
 	 * post processing
-	 * 
-	 * @param excelModel
-	 * 
-	 * @param excelArtefactAdapter
+	 * @param model
 	 */
 	public void storeSimpleExcelModelToXMI(Optional<File> model) {
 		model.ifPresent(m -> {
