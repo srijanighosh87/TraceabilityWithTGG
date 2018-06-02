@@ -1,0 +1,128 @@
+System.out.println("Execution started");
+
+int add_sheet_to_cell = 0;
+int add_sheet_to_row = 0;
+int add_sheet_to_col = 0;
+int add_row_to_cell = 0;
+int add_col_to_cell = 0;
+
+int del_sheet_to_cell = 0;
+int del_sheet_to_row = 0;
+int del_sheet_to_col = 0;
+int del_row_to_cell = 0;
+int del_col_to_cell = 0;
+
+for(int i = 0; i<operations.size(); i++) {
+	com.kaleidoscope.core.delta.javabased.operational.Operation op = operations.get(i);
+	if(op instanceof com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp){
+		
+		if(
+				((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getSrc() instanceof Simpleexcel.Sheet	 &&
+				((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getTrg() instanceof Simpleexcel.Cell
+			){
+				System.out.print("ADD SHEET : " +((Simpleexcel.Sheet)((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getSrc()).getSheetName());
+				System.out.println(" , CELL : "+((Simpleexcel.Cell)((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getTrg()).getText());
+			add_sheet_to_cell++;
+		}
+		
+		if(
+				((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getSrc() instanceof Simpleexcel.Sheet	 &&
+				((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getTrg() instanceof Simpleexcel.Row
+			){
+				//System.out.print("SHEET : " +((Simpleexcel.Sheet)((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getSrc()).getSheetName());
+				//System.out.println("ROW : "+((Simpleexcel.Row)((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getTrg()));
+			add_sheet_to_row++;
+		}
+		
+		if(
+				((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getSrc() instanceof Simpleexcel.Sheet	 &&
+				((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getTrg() instanceof Simpleexcel.Column
+			){
+				//System.out.print("SHEET : " +((Simpleexcel.Sheet)((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getSrc()).getSheetName());
+				//System.out.println("COLUMN : "+((Simpleexcel.Column)((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getTrg()));
+			add_sheet_to_col++;
+		}
+		
+		if(
+				((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getSrc() instanceof Simpleexcel.Row	 &&
+				((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getTrg() instanceof Simpleexcel.Cell
+			){
+				//System.out.print("ROW : " +((Simpleexcel.Row)((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getSrc()));
+				//System.out.println("CELL : "+((Simpleexcel.Cell)((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getTrg()).getText());
+			add_row_to_cell++;
+		}
+		
+		if(
+				((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getSrc() instanceof Simpleexcel.Column	 &&
+				((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getTrg() instanceof Simpleexcel.Cell
+			){
+				//System.out.print("COLUMN : " +((Simpleexcel.Column)((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getSrc()));
+				//System.out.println("CELL : "+((Simpleexcel.Cell)((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getTrg()).getText());
+			add_col_to_cell++;
+		}
+	}
+	
+	if(op instanceof com.kaleidoscope.core.delta.javabased.operational.DeleteEdgeOp){
+		
+		if(
+				((com.kaleidoscope.core.delta.javabased.operational.DeleteEdgeOp)op).getEdge().getSrc() instanceof Simpleexcel.Sheet	 &&
+				((com.kaleidoscope.core.delta.javabased.operational.DeleteEdgeOp)op).getEdge().getTrg() instanceof Simpleexcel.Cell
+			){
+				System.out.print("DELETE SHEET : " +((Simpleexcel.Sheet)((com.kaleidoscope.core.delta.javabased.operational.DeleteEdgeOp)op).getEdge().getSrc()).getSheetName());
+				System.out.println(" , CELL : "+((Simpleexcel.Cell)((com.kaleidoscope.core.delta.javabased.operational.DeleteEdgeOp)op).getEdge().getTrg()).getText());
+			del_sheet_to_cell++;
+		}
+		
+		if(
+				((com.kaleidoscope.core.delta.javabased.operational.DeleteEdgeOp)op).getEdge().getSrc() instanceof Simpleexcel.Sheet	 &&
+				((com.kaleidoscope.core.delta.javabased.operational.DeleteEdgeOp)op).getEdge().getTrg() instanceof Simpleexcel.Row
+			){
+				//System.out.print("SHEET : " +((Simpleexcel.Sheet)((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getSrc()).getSheetName());
+				//System.out.println("ROW : "+((Simpleexcel.Row)((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getTrg()));
+			del_sheet_to_row++;
+		}
+		
+		if(
+				((com.kaleidoscope.core.delta.javabased.operational.DeleteEdgeOp)op).getEdge().getSrc() instanceof Simpleexcel.Sheet	 &&
+				((com.kaleidoscope.core.delta.javabased.operational.DeleteEdgeOp)op).getEdge().getTrg() instanceof Simpleexcel.Column
+			){
+				//System.out.print("SHEET : " +((Simpleexcel.Sheet)((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getSrc()).getSheetName());
+				//System.out.println("COLUMN : "+((Simpleexcel.Column)((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getTrg()));
+			del_sheet_to_col++;
+		}
+		
+		if(
+				((com.kaleidoscope.core.delta.javabased.operational.DeleteEdgeOp)op).getEdge().getSrc() instanceof Simpleexcel.Row	 &&
+				((com.kaleidoscope.core.delta.javabased.operational.DeleteEdgeOp)op).getEdge().getTrg() instanceof Simpleexcel.Cell
+			){
+				//System.out.print("ROW : " +((Simpleexcel.Row)((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getSrc()));
+				//System.out.println("CELL : "+((Simpleexcel.Cell)((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getTrg()).getText());
+			del_row_to_cell++;
+		}
+		
+		if(
+				((com.kaleidoscope.core.delta.javabased.operational.DeleteEdgeOp)op).getEdge().getSrc() instanceof Simpleexcel.Column	 &&
+				((com.kaleidoscope.core.delta.javabased.operational.DeleteEdgeOp)op).getEdge().getTrg() instanceof Simpleexcel.Cell
+			){
+				//System.out.print("COLUMN : " +((Simpleexcel.Column)((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getSrc()));
+				//System.out.println("CELL : "+((Simpleexcel.Cell)((com.kaleidoscope.core.delta.javabased.operational.AddEdgeOp)op).getEdge().getTrg()).getText());
+			del_col_to_cell++;
+		}
+	}
+	
+}
+System.out.println("ADD OPS ...");
+System.out.println("SHEET_TO_CELL_EDGE : "+add_sheet_to_cell);
+System.out.println("SHEET_TO_ROW_EDGE : "+add_sheet_to_row);
+System.out.println("SHEET_TO_COLUMN_EDGE : "+add_sheet_to_col);
+System.out.println("ROW_TO_CELL_EDGE : "+add_row_to_cell);
+System.out.println("COL_TO_CELL_EDGE : "+add_col_to_cell);
+System.out.println();
+System.out.println("DELETE OPS ...");
+System.out.println("SHEET_TO_CELL_EDGE : "+del_sheet_to_cell);
+System.out.println("SHEET_TO_ROW_EDGE : "+del_sheet_to_row);
+System.out.println("SHEET_TO_COLUMN_EDGE : "+del_sheet_to_col);
+System.out.println("ROW_TO_CELL_EDGE : "+del_row_to_cell);
+System.out.println("COL_TO_CELL_EDGE : "+del_col_to_cell);
+System.out.println();
+System.out.println("Execution complete");
