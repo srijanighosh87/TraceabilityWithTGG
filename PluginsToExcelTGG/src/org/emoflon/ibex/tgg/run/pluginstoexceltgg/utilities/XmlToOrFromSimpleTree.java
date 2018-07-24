@@ -29,7 +29,7 @@ public class XmlToOrFromSimpleTree {
 		xmlAdapter.parse();
 
 		// save it to src.xmi at path <generatedSimpleTreeModelPath>
-		//storeSimpleTreeModelToXMI(xmlAdapter);
+		storeSimpleTreeModelToXMI(xmlAdapter);
 
 		return xmlAdapter.getModel();
 	}
@@ -39,7 +39,7 @@ public class XmlToOrFromSimpleTree {
 	 * 
 	 * @param xmlAdapter
 	 */
-/*	private void storeSimpleTreeModelToXMI(XMLArtefactAdapter xmlAdapter) {
+	private void storeSimpleTreeModelToXMI(XMLArtefactAdapter xmlAdapter) {
 		// store the parsed tree in .xmi file
 		Optional<TreeElement> model = xmlAdapter.getModel();
 		model.ifPresent(m -> {
@@ -49,7 +49,7 @@ public class XmlToOrFromSimpleTree {
 			xmiArtefactAdapter.unparse();
 		});
 		System.out.println("Parsing completed ...");
-	}*/
+	}
 
 	/**
 	 * @param workspacePath

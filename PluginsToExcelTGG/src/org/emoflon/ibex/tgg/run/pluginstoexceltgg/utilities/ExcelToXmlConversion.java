@@ -37,7 +37,7 @@ public class ExcelToXmlConversion {
 		this.workspacePath= workspacePath;
 		
 		// convert Excel artefact to SimpleExcelmodel
-		Optional<File> excelModel = this.convertExcelToSimpleExcel(excelPath);
+		Optional<ExcelElement> excelModel = this.convertExcelToSimpleExcel(excelPath);
 
 		// pre-processing: disconnect the invalid row connections and save it as trg.xmi
 		this.preProcessing(excelModel, this);
@@ -48,7 +48,7 @@ public class ExcelToXmlConversion {
 		BasicConfigurator.configure();
 		excelModel.ifPresent(excel ->{
 			try {
-				SYNC_App sync = new SYNC_App(false, excel);
+				SYNC_App sync = new SYNC_App(false);
 				sync.backward();
 				sync.terminate();
 				//set model in local variable
@@ -101,11 +101,11 @@ public class ExcelToXmlConversion {
 	 * 
 	 * @param excelModel
 	 */
-	private void preProcessing(Optional<File> excelOptionalModel, ExcelToXmlConversion xmlToExcelConversion) {
+	private void preProcessing(Optional<ExcelElement> excelOptionalModel, ExcelToXmlConversion xmlToExcelConversion) {
 		System.out.println("Starting pre-processing ... ");
 		File file = null;
 		if (excelOptionalModel.isPresent()) {
-			file = excelOptionalModel.get();
+			file = (Simpleexcel.File)excelOptionalModel.get();
 			Sheet sheet = file.getSheet().size() > 0 ? file.getSheet().get(0) : null;
 			if (sheet != null) {
 				List<Row> rowList = sheet.getRowobject().size() > 0 ? sheet.getRowobject() : null;
@@ -335,7 +335,7 @@ public class ExcelToXmlConversion {
 	 * @return
 	 *
 	 */
-	private Optional<File> convertExcelToSimpleExcel(String excelPath) {
+	private Optional<ExcelElement> convertExcelToSimpleExcel(String excelPath) {
 		ExcelToOrFromSimpleExcel excelToSimpleExcel = new ExcelToOrFromSimpleExcel();
 		return excelToSimpleExcel.convertExcelToSimpleExcel(excelPath);
 	}
@@ -346,7 +346,7 @@ public class ExcelToXmlConversion {
 	 * post processing
 	 * @param model
 	 */
-	public void storeSimpleExcelModelToXMI(Optional<File> model) {
+	public void storeSimpleExcelModelToXMI(Optional<ExcelElement> model) {
 		model.ifPresent(m -> {
 			XMIArtefactAdapter<ExcelElement> xmiArtefactAdapter = new XMIArtefactAdapter<ExcelElement>(
 					Paths.get(CONSTANTS.SIMPLE_EXCEL_XMI_PATH));
