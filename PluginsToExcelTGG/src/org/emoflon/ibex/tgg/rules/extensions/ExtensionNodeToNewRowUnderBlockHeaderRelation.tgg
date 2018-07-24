@@ -4,6 +4,29 @@
 #rule ExtensionNodeToNewRowUnderBlockHeaderRelation #with PluginsToExcelTGG
 
 #source {
+	
+	xmlFolder_workspace:Folder{
+		-subFolder -> pluginFolder
+		-subFolder -> pluginFolder1
+	}
+
+	pluginFolder:Folder {
+		-file -> pluginXmlFile
+	}
+	
+	pluginFolder1:Folder {
+		-file -> pluginXmlFile1
+	}
+
+	pluginXmlFile:File {
+		name=="plugin.xml"
+		-rootNode -> pluginProviderNode
+	}
+	
+	pluginXmlFile1:File {
+		name=="plugin.xml"
+		-rootNode -> pluginNode
+	}
 
 	pluginNode:Node {
 		++-children -> extensionNode
@@ -19,7 +42,7 @@
 	
 	extensionPointAttr: Attribute{
 		name  == "id"
-	}
+	} 
 	
 	++extensionNode:Node {
 		name:="extension"
@@ -105,9 +128,9 @@
 }
 
 #attributeConditions {
-	eq_string(extensionAttr.value, extensionPointAttr.value)
+	concat(".", pluginFolder.name, extensionPointAttr.value, extensionAttr.value)
+	//eq_string(extensionPointAttr.value, extensionAttr.value)
 	eq_string(extensionAttr.value, cell_2.text)
-	
 }
 
 

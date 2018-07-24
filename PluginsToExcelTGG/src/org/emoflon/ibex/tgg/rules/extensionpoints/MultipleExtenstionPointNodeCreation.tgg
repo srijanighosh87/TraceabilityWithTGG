@@ -1,7 +1,7 @@
 #using PluginsToExcelTGG.*
 #using AttrCondDefLibrary.*
 
-#rule ExtenstionPointNodeCreation #with PluginsToExcelTGG
+#rule MultipleExtenstionPointNodeCreation #with PluginsToExcelTGG
 
 #source { 
 	xmlFolder_workspace:Folder{
@@ -19,15 +19,20 @@
 	
 	
 	pluginProviderNode:Node {
-		++-children -> extensionPointNode
+		-children -> extensionPointNode
 	}
 	
-	++extensionPointNode:Node {
-		name:="extension-point"
-		++-attribute -> extensionPointAttr
+	extensionPointNode:Node {
+		name=="extension-point"
+		-attribute->extensionPointAttr
+		++-attribute -> newExtensionPointAttr
 	}
 	
-	++extensionPointAttr:Attribute{
+	extensionPointAttr:Attribute{
+		name != "id"
+	}
+	
+	++newExtensionPointAttr:Attribute{
 		name:="id"
 	}
 }

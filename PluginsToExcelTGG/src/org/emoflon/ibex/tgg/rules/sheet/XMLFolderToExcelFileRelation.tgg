@@ -46,6 +46,6 @@
 }
 
 #attributeConditions {
-	//eq_string(excelFile.fileName, xmlFolder_workspace.name)
+	eq_string(excelFile.fileName, xmlFolder_workspace.name)
 }
 

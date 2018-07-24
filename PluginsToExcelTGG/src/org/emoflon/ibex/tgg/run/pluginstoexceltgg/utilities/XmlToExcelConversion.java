@@ -13,10 +13,12 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.emoflon.ibex.tgg.run.pluginstoexceltgg.SYNC_App;
 
 import com.kaleidoscope.core.auxiliary.simpleexcel.utils.ExcelException;
+import com.kaleidoscope.core.auxiliary.simpletree.artefactadapter.XML.XMLArtefactAdapter;
 import com.kaleidoscope.core.auxiliary.xmi.artefactadapter.XMIArtefactAdapter;
 
 import Simpleexcel.Cell;
@@ -24,8 +26,10 @@ import Simpleexcel.ExcelElement;
 import Simpleexcel.File;
 import Simpleexcel.Row;
 import Simpleexcel.Sheet;
+import Simpleexcel.SimpleexcelPackage;
 import Simpleexcel.impl.FileImpl;
 import Simpletree.Folder;
+import Simpletree.SimpletreePackage;
 import Simpletree.TreeElement;
 import Simpletree.impl.FolderImpl;
 
@@ -43,9 +47,11 @@ public class XmlToExcelConversion {
 
 		// convert XML artefact to Simpletreemodel
 		simpleTreeOptionalModel = this.convertXMLToSimpleTree(workspacePath);
+		
+		
 
 		// pre-processing
-		//this.workspacePath = 
+		//simpleTreeOptionalModel = Optional.of(this.readSimpleTreeXMIModel());
 		this.preProcessing();
 		
 
@@ -76,16 +82,12 @@ public class XmlToExcelConversion {
 				Folder workspaceFolder = (Folder) simpleTreeOptionalModel.get();
 				
 				for (Folder projectFolder : workspaceFolder.getSubFolder()) {
-					//System.out.println("Project: " + projectFolder);
-					//System.out.println(projectFolder.getFile());
 					int index = 0;
 					
 					for(int i = 0; i<projectFolder.getFile().size(); i++) {
-						//System.out.println("File: " + projectFolder.getFile().get(i));
 						Simpletree.File nonPluginXmlFile = projectFolder.getFile().get(i);
 						if(!nonPluginXmlFile.getName().equalsIgnoreCase("plugin.xml")) {
 							nonPluginXmlFile.setFolder(null);
-							//System.out.println();
 						}
 					}
 
@@ -100,44 +102,6 @@ public class XmlToExcelConversion {
 		}
 
 		storeSimpleTreeModelToXMI(simpleTreeOptionalModel);
-		
-		/*String workspaceLocation = "";
-
-		if (simpleTreeOptionalModel.isPresent()) {
-			if (simpleTreeOptionalModel.get() instanceof FolderImpl) {
-				workspaceLocation += simpleTreeOptionalModel.get().getName();
-				Folder rootFoler = (Folder) simpleTreeOptionalModel.get();
-				int childrenFolderCount = rootFoler.getSubFolder().size();
-				int childrenFileCount = rootFoler.getFile().size();
-				while (childrenFileCount == 0 && childrenFolderCount > 0) {
-					if (childrenFolderCount == 1) {
-						workspaceLocation += "\\" + rootFoler.getSubFolder().get(0).getName();
-
-						rootFoler = rootFoler.getSubFolder().get(0);
-						childrenFolderCount = rootFoler.getSubFolder().size();
-						childrenFileCount = rootFoler.getFile().size();
-
-					} else {
-						trimSimpleTreeModel(rootFoler);
-					}
-
-				}
-			} else {
-				throw new Exception("Invalid SimpleTree model to process. ");
-			}
-
-			System.out.println("End pre-processing on SimpleTree Model... ");
-
-			int lastIndex = workspaceLocation.lastIndexOf("\\");
-			if (lastIndex > -1)
-				workspaceLocation = workspaceLocation.substring(0, lastIndex);
-			else
-				throw new ExcelException("Invalid workspace location ...");
-
-			return workspaceLocation;
-		} else {
-			throw new Exception("Invalid Simple model ...");
-		}*/
 	}
 
 	/**

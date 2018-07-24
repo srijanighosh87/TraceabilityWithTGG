@@ -23,8 +23,9 @@ public class MODELGEN_App extends MODELGEN {
 		MODELGEN_App generator = new MODELGEN_App();
 		
 		MODELGENStopCriterion stop = new MODELGENStopCriterion(generator.getTGG());
-		stop.setTimeOutInMS(100);
+		stop.setTimeOutInMS(1000);
 		generator.setStopCriterion(stop);
+
 		
 		logger.info("Starting MODELGEN");
 		long tic = System.currentTimeMillis();

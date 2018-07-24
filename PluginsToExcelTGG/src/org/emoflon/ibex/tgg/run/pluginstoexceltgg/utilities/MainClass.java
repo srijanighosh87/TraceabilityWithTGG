@@ -21,7 +21,7 @@ public class MainClass {
 				System.out.println("Transforming Plugin Workspace to EXCEL");
 				new XmlToExcelConversion().convert(
 						"C:\\Users\\Srijani\\Desktop\\papers\\plugins\\emf-master\\emf-master\\plugins",
-						"C:\\Users\\Srijani\\Desktop\\papers\\plugins\\emf-master\\Relationship.xlsx");
+						"C:\\Users\\Srijani\\Desktop\\papers\\plugins\\emf-master\\emf-master\\Relationship.xlsx");
 			} catch (Exception e) {
 				System.out.println("Some error occurred ..." + e);
 			}
