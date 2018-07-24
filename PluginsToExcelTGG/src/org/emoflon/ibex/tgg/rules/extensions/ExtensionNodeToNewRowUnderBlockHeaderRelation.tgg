@@ -9,6 +9,18 @@
 		++-children -> extensionNode
 	}
 
+	pluginProviderNode:Node {
+		-children -> extensionPointNode
+	}
+	
+	extensionPointNode:Node{
+		-attribute -> extensionPointAttr
+	}
+	
+	extensionPointAttr: Attribute{
+		name  == "id"
+	}
+	
 	++extensionNode:Node {
 		name:="extension"
 		++-attribute -> extensionAttr
@@ -93,7 +105,9 @@
 }
 
 #attributeConditions {
+	eq_string(extensionAttr.value, extensionPointAttr.value)
 	eq_string(extensionAttr.value, cell_2.text)
+	
 }
 
 

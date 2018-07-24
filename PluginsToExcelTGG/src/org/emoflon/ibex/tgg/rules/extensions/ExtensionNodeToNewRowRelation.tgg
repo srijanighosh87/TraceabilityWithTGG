@@ -4,9 +4,35 @@
 #rule ExtensionNodeToNewRowRelation #with PluginsToExcelTGG
 
 #source { 
-	extensionNodeOld:Node{
+
+	xmlFolder_workspace:Folder{
+		-subFolder -> pluginFolder
 	}
 
+	pluginFolder:Folder {
+		-file -> pluginXmlFile
+	}
+
+	pluginXmlFile:File {
+		name=="plugin.xml"
+		-rootNode -> pluginProviderNode
+	}
+	
+	pluginProviderNode:Node {
+		-children -> extensionPointNode
+	}
+	
+	extensionPointNode:Node{
+		-attribute -> extensionPointAttr
+	}
+	
+	extensionPointAttr: Attribute{
+		name  == "id"
+	}
+	
+	extensionNodeOld:Node{
+	}
+	
 	pluginNode:Node {
 		-children->extensionNodeOld
 		++-children -> extensionNode
@@ -20,6 +46,9 @@
 
 	++extensionAttr:Attribute{
 		name:="point"
+	}
+
+	++temp:Node{
 	}
 }
 
@@ -97,5 +126,6 @@
 }
 
 #attributeConditions {
+	eq_string(extensionAttr.value, extensionPointAttr.value)
 	eq_string(extensionAttr.value, cell_2.text)
 }

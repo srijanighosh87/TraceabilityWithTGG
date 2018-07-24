@@ -70,23 +70,22 @@ public class XmlToExcelConversion {
 	@SuppressWarnings("unlikely-arg-type")
 	private void preProcessing() throws Exception{
 		System.out.println("Starting pre-processing on SimpleTree Model... ");
-
 		if (simpleTreeOptionalModel.isPresent()) {
 			if (simpleTreeOptionalModel.get() instanceof FolderImpl) {
 				
 				Folder workspaceFolder = (Folder) simpleTreeOptionalModel.get();
 				
 				for (Folder projectFolder : workspaceFolder.getSubFolder()) {
-					System.out.println("Project: " + projectFolder);
-					System.out.println(projectFolder.getFile());
+					//System.out.println("Project: " + projectFolder);
+					//System.out.println(projectFolder.getFile());
 					int index = 0;
 					
 					for(int i = 0; i<projectFolder.getFile().size(); i++) {
-						System.out.println("File: " + projectFolder.getFile().get(i));
+						//System.out.println("File: " + projectFolder.getFile().get(i));
 						Simpletree.File nonPluginXmlFile = projectFolder.getFile().get(i);
 						if(!nonPluginXmlFile.getName().equalsIgnoreCase("plugin.xml")) {
 							nonPluginXmlFile.setFolder(null);
-							System.out.println();
+							//System.out.println();
 						}
 					}
 
