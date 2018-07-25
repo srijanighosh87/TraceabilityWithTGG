@@ -1,7 +1,7 @@
 #using PluginsToExcelTGG.*
 #using AttrCondDefLibrary.*
 
-#rule MultipleExtenstionPointNodeCreation #with PluginsToExcelTGG
+#abstract #rule MultipleExtenstionPointNodeCreation #with PluginsToExcelTGG
 
 #source { 
 	xmlFolder_workspace:Folder{

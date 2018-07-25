@@ -6,21 +6,21 @@
 #source {
 	
 	xmlFolder_workspace:Folder{
-		-subFolder -> pluginFolder
+		++-subFolder -> newpluginFolder
 		-subFolder -> pluginFolder1
 	}
 
-	pluginFolder:Folder {
-		-file -> pluginXmlFile
+	++newpluginFolder:Folder {
+		++-file -> newpluginXmlFile
 	}
 	
 	pluginFolder1:Folder {
 		-file -> pluginXmlFile1
 	}
 
-	pluginXmlFile:File {
-		name=="plugin.xml"
-		-rootNode -> pluginProviderNode
+	++newpluginXmlFile:File {
+		name:="plugin.xml"
+		++-rootNode -> newpluginProviderNode
 	}
 	
 	pluginXmlFile1:File {
@@ -32,16 +32,18 @@
 		++-children -> extensionNode
 	}
 
-	pluginProviderNode:Node {
-		-children -> extensionPointNode
+	++newpluginProviderNode:Node {
+		name:="plugin"
+		++-children -> newextensionPointNode
 	}
 	
-	extensionPointNode:Node{
-		-attribute -> extensionPointAttr
+	++newextensionPointNode:Node{
+		name:="extension-point"
+		++-attribute -> newextensionPointAttr
 	}
 	
-	extensionPointAttr: Attribute{
-		name  == "id"
+	++newextensionPointAttr: Attribute{
+		name  := "id"
 	} 
 	
 	++extensionNode:Node {
@@ -128,9 +130,8 @@
 }
 
 #attributeConditions {
-	concat(".", pluginFolder.name, extensionPointAttr.value, extensionAttr.value)
+	concat(".", newpluginFolder.name, newextensionPointAttr.value, extensionAttr.value)	
 	//eq_string(extensionPointAttr.value, extensionAttr.value)
 	eq_string(extensionAttr.value, cell_2.text)
 }
-
 

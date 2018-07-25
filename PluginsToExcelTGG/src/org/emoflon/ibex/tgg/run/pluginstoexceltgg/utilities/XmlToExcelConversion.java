@@ -51,7 +51,7 @@ public class XmlToExcelConversion {
 		
 
 		// pre-processing
-		//simpleTreeOptionalModel = Optional.of(this.readSimpleTreeXMIModel());
+		simpleTreeOptionalModel = Optional.of(this.readSimpleTreeXMIModel());
 		this.preProcessing();
 		
 
@@ -282,7 +282,7 @@ public class XmlToExcelConversion {
 	 * 
 	 * @return
 	 */
-	private TreeElement readSimpleTreeXMIModel() {
+	public TreeElement readSimpleTreeXMIModel() {
 		ResourceSet rs = new ResourceSetImpl();
 		rs.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
 		Resource resource = rs.getResource(URI.createURI(CONSTANTS.SIMPLE_TREE_XMI_PATH), true);

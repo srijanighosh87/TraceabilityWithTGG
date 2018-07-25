@@ -1,38 +1,51 @@
 #using PluginsToExcelTGG.*
 #using AttrCondDefLibrary.*
 
-#rule ExtensionNodeToNewRowRelation #with PluginsToExcelTGG
+#rule MultipleExtPoint_ExtensionNodeToNewRowUnderBlockHeaderRelation #with PluginsToExcelTGG
 
 #source {
-
+	
 	xmlFolder_workspace:Folder{
-		++-subFolder -> newpluginFolder
+		-subFolder -> newpluginFolder
 		-subFolder -> pluginFolder1
 	}
 
-	++newpluginFolder:Folder {
-		++-file -> newpluginXmlFile
+	newpluginFolder:Folder {
+		-file -> newpluginXmlFile
 	}
 	
 	pluginFolder1:Folder {
 		-file -> pluginXmlFile1
-	}
+	} 
 
-	++newpluginXmlFile:File {
-		name:="plugin.xml"
-		++-rootNode -> newpluginProviderNode
+	newpluginXmlFile:File {
+		name=="plugin.xml"
+		-rootNode -> newpluginProviderNode
 	}
 	
 	pluginXmlFile1:File {
 		name=="plugin.xml"
 		-rootNode -> pluginNode
 	}
+
+	pluginNode:Node {
+		++-children -> extensionNode
+	}
 	
-		
-	++newpluginProviderNode:Node {
-		name:="plugin"
+		++extensionNode:Node {
+		name:="extension"
+		++-attribute -> extensionAttr
+	}
+
+	++extensionAttr:Attribute{
+		name:="point"
+	}
+
+	newpluginProviderNode:Node {
+		name=="plugin"
 		++-children -> newextensionPointNode
 	}
+
 	
 	++newextensionPointNode:Node{
 		name:="extension-point"
@@ -43,36 +56,22 @@
 		name  := "id"
 	} 
 	
-	extensionNodeOld:Node{
-	}
-	
-	pluginNode:Node {
-		-children->extensionNodeOld
-		++-children -> extensionNode
-	}
-
-	
-	++extensionNode:Node {
-		name:="extension"
-		++-attribute -> extensionAttr
-	}
-
-	++extensionAttr:Attribute{
-		name:="point"
-	}
 
 }
 
 #target {
 	// create new cells for extension points
 	++cell_1:Cell
+	/*{
+		text:=""
+	} */
 
 	++cell_2:Cell
 
 	++cell_3:Cell
 
 	++cell_4:Cell
-
+	
 		// create new row for extension
 	++newRowForExtenstion:Row{
 		++-cell -> cell_1
@@ -100,16 +99,15 @@
 	reviewColumn:Column{
 		++-cell -> cell_4
 	}
-	
-	lastRow:Row{
-		++-nextRow->newRowForExtenstion
+
+		// adding new row after block header
+	blockHeader:Row{
+		++-nextRow -> newRowForExtenstion
 	}
-	
-	
+
 	sheet:Sheet {
 		++-rowobject -> newRowForExtenstion
-		-rowobject->lastRow
-		
+		-rowobject -> blockHeader
 		++-cell -> cell_1
 		++-cell -> cell_2
 		++-cell -> cell_3
@@ -118,22 +116,20 @@
 		-colobject -> dependenciesColumn
 		-colobject -> documentationColumn
 		-colobject -> reviewColumn
-		
 	}
-
 }
 
 #correspondence {
+
+	pluginFolderToBlockHeaderRowRule:PluginNodeToRowRelation{
+		#src->pluginNode
+		#trg->blockHeader
+	}
+
 	++extensionNodeToRowRule:ExtensionNodeToRowRelation{
 		#src->extensionNode
 		#trg->newRowForExtenstion
 	}
-	
-	extensionNodeToOldRowRule:ExtensionNodeToRowRelation{
-		#src->extensionNodeOld
-		#trg->lastRow
-	}
-	
 }
 
 #attributeConditions {
@@ -141,3 +137,4 @@
 	//eq_string(extensionPointAttr.value, extensionAttr.value)
 	eq_string(extensionAttr.value, cell_2.text)
 }
+

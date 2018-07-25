@@ -20,16 +20,16 @@ public class MainClass {
 			try {
 				System.out.println("Transforming Plugin Workspace to EXCEL");
 				new XmlToExcelConversion().convert(
-						"C:\\Users\\Srijani\\Desktop\\papers\\plugins\\emf-master\\emf-master\\plugins",
-						"C:\\Users\\Srijani\\Desktop\\papers\\plugins\\emf-master\\emf-master\\Relationship.xlsx");
+						"C:\\Users\\Srijani\\Desktop\\Workspace",
+						"C:\\Users\\Srijani\\Desktop\\Workspace\\Relationship.xlsx");
 			} catch (Exception e) {
 				System.out.println("Some error occurred ..." + e);
 			}
 		} else {
 			try {
 				System.out.println("Transforming EXCEL to Plugin Workspace");
-				new ExcelToXmlConversion().convert("C:\\Users\\Srijani\\Desktop\\Workspace\\Relationship.xlsx",
-						"C:\\Users\\Srijani\\Desktop\\HelloWorld\\Workspace");
+				new ExcelToXmlConversion().convert("C:\\Users\\Srijani\\Desktop\\Workspace\\Relationship_bkp.xlsx",
+						"C:\\Users\\Srijani\\Desktop\\Workspace\\Generated");
 			} catch (IOException e) {
 				System.out.println("Some error occurred ...");
 			}

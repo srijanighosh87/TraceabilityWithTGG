@@ -25,7 +25,7 @@ public class SYNC_App extends SYNC {
 		sync.executeSync(sync);
 	}
 
-	public void executeSync(SYNC_App sync) throws IOException {
+	public long executeSync(SYNC_App sync) throws IOException {
 		logger.info("Starting SYNC");
 		long tic = System.currentTimeMillis();
 
@@ -46,6 +46,8 @@ public class SYNC_App extends SYNC {
 
 		sync.saveModels();
 		sync.terminate();
+		
+		return (toc - tic);
 	}
 
 	
@@ -87,11 +89,11 @@ public class SYNC_App extends SYNC {
 		options.projectPath("PluginsToExcelTGG");
 		
 		//change optimizers
-		options.minimumNumberOfEdgesToCreateEdgePatterns(5);
+		options.minimumNumberOfEdgesToCreateEdgePatterns(20);
 		options.setCorrContextNodesAsLocalNodes(true); 
 		options.stronglyTypedEdgedPatterns(false);
 		
-		options.debug(true);
+		//options.debug(true);
 		
 		options.userDefinedConstraints(new UserDefinedRuntimeTGGAttrConstraintFactory());
 		return options;

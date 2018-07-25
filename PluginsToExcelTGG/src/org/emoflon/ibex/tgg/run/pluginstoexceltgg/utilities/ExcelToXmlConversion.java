@@ -44,25 +44,19 @@ public class ExcelToXmlConversion {
 		storeSimpleExcelModelToXMI(excelModel);
 
 		// call SYNC_APP
-		long startMilliSeconds = System.currentTimeMillis();
 		BasicConfigurator.configure();
 		excelModel.ifPresent(excel ->{
 			try {
 				SYNC_App sync = new SYNC_App(false);
-				sync.backward();
-				sync.terminate();
+				sync.executeSync(sync);
+				
 				//set model in local variable
 				simpleTreeModel = (TreeElement) sync.getSourceResource().getContents().get(0);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
 		});
-		
-		
-		long endMilliSeconds = System.currentTimeMillis();
-		System.out.println("time taken : " + (endMilliSeconds-startMilliSeconds));
 
 		// read xmi file and convert simpleExcelmodel to Excel artefact
 		this.convertSimpleTreeToWorkspace(simpleTreeModel);

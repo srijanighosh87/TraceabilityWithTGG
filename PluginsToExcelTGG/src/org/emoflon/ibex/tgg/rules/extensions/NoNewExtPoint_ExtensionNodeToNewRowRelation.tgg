@@ -1,26 +1,26 @@
 #using PluginsToExcelTGG.*
 #using AttrCondDefLibrary.*
 
-#rule ExtensionNodeToNewRowRelation #with PluginsToExcelTGG
+#rule NoNewExtPoint_ExtensionNodeToNewRowRelation #with PluginsToExcelTGG
 
 #source {
 
 	xmlFolder_workspace:Folder{
-		++-subFolder -> newpluginFolder
+		-subFolder -> newpluginFolder
 		-subFolder -> pluginFolder1
 	}
 
-	++newpluginFolder:Folder {
-		++-file -> newpluginXmlFile
+	newpluginFolder:Folder {
+		-file -> newpluginXmlFile
 	}
 	
 	pluginFolder1:Folder {
 		-file -> pluginXmlFile1
 	}
 
-	++newpluginXmlFile:File {
-		name:="plugin.xml"
-		++-rootNode -> newpluginProviderNode
+	newpluginXmlFile:File {
+		name=="plugin.xml"
+		-rootNode -> newpluginProviderNode
 	}
 	
 	pluginXmlFile1:File {
@@ -29,18 +29,18 @@
 	}
 	
 		
-	++newpluginProviderNode:Node {
-		name:="plugin"
-		++-children -> newextensionPointNode
+	newpluginProviderNode:Node {
+		name=="plugin"
+		-children -> newextensionPointNode
 	}
 	
-	++newextensionPointNode:Node{
-		name:="extension-point"
-		++-attribute -> newextensionPointAttr
+	newextensionPointNode:Node{
+		name=="extension-point"
+		-attribute -> newextensionPointAttr
 	}
 	
-	++newextensionPointAttr: Attribute{
-		name  := "id"
+	newextensionPointAttr: Attribute{
+		name == "id"
 	} 
 	
 	extensionNodeOld:Node{
@@ -138,6 +138,5 @@
 
 #attributeConditions {
 	concat(".", newpluginFolder.name, newextensionPointAttr.value, extensionAttr.value)
-	//eq_string(extensionPointAttr.value, extensionAttr.value)
 	eq_string(extensionAttr.value, cell_2.text)
 }
