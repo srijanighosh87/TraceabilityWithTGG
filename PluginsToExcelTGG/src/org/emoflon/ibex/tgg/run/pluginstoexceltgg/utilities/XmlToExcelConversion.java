@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.TreeMap;
 
 import org.apache.log4j.BasicConfigurator;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -28,8 +29,11 @@ import Simpleexcel.Row;
 import Simpleexcel.Sheet;
 import Simpleexcel.SimpleexcelPackage;
 import Simpleexcel.impl.FileImpl;
+import Simpletree.Attribute;
 import Simpletree.Folder;
+import Simpletree.Node;
 import Simpletree.SimpletreePackage;
+import Simpletree.Text;
 import Simpletree.TreeElement;
 import Simpletree.impl.FolderImpl;
 
@@ -47,13 +51,10 @@ public class XmlToExcelConversion {
 
 		// convert XML artefact to Simpletreemodel
 		simpleTreeOptionalModel = this.convertXMLToSimpleTree(workspacePath);
-		
-		
 
 		// pre-processing
 		simpleTreeOptionalModel = Optional.of(this.readSimpleTreeXMIModel());
 		this.preProcessing();
-		
 
 		// call SYNC_APP
 		BasicConfigurator.configure();
@@ -74,24 +75,41 @@ public class XmlToExcelConversion {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unlikely-arg-type")
-	private void preProcessing() throws Exception{
+	private void preProcessing() throws Exception {
 		System.out.println("Starting pre-processing on SimpleTree Model... ");
 		if (simpleTreeOptionalModel.isPresent()) {
 			if (simpleTreeOptionalModel.get() instanceof FolderImpl) {
-				
+
 				Folder workspaceFolder = (Folder) simpleTreeOptionalModel.get();
-				
+
 				for (Folder projectFolder : workspaceFolder.getSubFolder()) {
-					
-					for(int i = 0; i<projectFolder.getFile().size(); i++) {
+					// remove non-plugin.xml file
+					for (int i = 0; i < projectFolder.getFile().size(); i++) {
 						Simpletree.File nonPluginXmlFile = projectFolder.getFile().get(i);
-						if(!nonPluginXmlFile.getName().equalsIgnoreCase("plugin.xml")) {
+						if (!nonPluginXmlFile.getName().equalsIgnoreCase("plugin.xml")) {
 							nonPluginXmlFile.setFolder(null);
 						}
 					}
 
+					// replace . by # for extensions
+					Node rootNode = (Node) projectFolder.getFile().get(0).getRootNode();
+					for (Text child : rootNode.getChildren()) {
+						if (child.getName().equalsIgnoreCase("extension")) {
+							List<Attribute> attrList = ((Node) child).getAttribute();
+							for (Attribute attribute : attrList) {
+								if (attribute.getName().equalsIgnoreCase("point")) {
+									String oldVal = attribute.getValue();
+									StringBuilder strb = new StringBuilder(oldVal);
+									int index = strb.lastIndexOf(".");
+									strb.replace(index, ".".length() + index, "#");
+									attribute.setValue(strb.toString());
+								}
+							}
+						}
+					}
+
 				}
-				
+
 			} else {
 				throw new Exception("Invalid SimpleTree model to process. ");
 			}
@@ -139,14 +157,17 @@ public class XmlToExcelConversion {
 			if (rowList != null) {
 				for (Row row : rowList) {
 					if (row.getPrevRow() == null) {
-						// System.out.println("Header Row: "+ row.getBackgroundColor());
 						Row header = row;
 						// define extensionRowList
 						List<Row> extensionRowList = new ArrayList<Row>();
 						while (row.getNextRow() != null) {
-							// System.out.println(" Extension Row : "+ row.getBackgroundColor());
+							// System.out.println(" Extension Row : "+ row.getBackgroundColor());			
 							extensionRowList.add(row.getNextRow());
 							row = row.getNextRow();
+							
+							String oldExtensionText = row.getCell().get(1).getText();
+							row.getCell().get(1).setText(oldExtensionText.replaceAll("#", "."));
+							
 						}
 
 						pluginBlockMap.put(header, extensionRowList);
@@ -176,6 +197,7 @@ public class XmlToExcelConversion {
 		}
 
 		xmlToExcelConversionMainClass.storeSimpleExcelModelToXMI(excelElement, xmlToExcelConversionMainClass);
+		storeSimpleExcelModelToXMI(excelElement, xmlToExcelConversionMainClass);
 
 		System.out.println("Post-processing End on SimpleExcel Model ... ");
 	}
@@ -251,7 +273,7 @@ public class XmlToExcelConversion {
 			XmlToExcelConversion xmlToExcelConversionMainClass) {
 
 		XMIArtefactAdapter<ExcelElement> xmiArtefactAdapter = new XMIArtefactAdapter<ExcelElement>(
-				Paths.get("./Resources/postProcessedExcel/trg_processed.xmi"));
+				Paths.get("./instances/trg.xmi"));
 		xmiArtefactAdapter.setModel(excelElement);
 		xmiArtefactAdapter.unparse();
 
