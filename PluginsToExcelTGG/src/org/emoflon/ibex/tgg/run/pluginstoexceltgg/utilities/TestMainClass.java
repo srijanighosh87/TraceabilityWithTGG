@@ -1,8 +1,11 @@
 package org.emoflon.ibex.tgg.run.pluginstoexceltgg.utilities;
 
+import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Time;
 import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.BasicConfigurator;
 import org.eclipse.emf.common.util.URI;
@@ -32,11 +35,19 @@ public class TestMainClass {
 	private static final String FILE_HEADER = "Timestamp,NoOfWorkspace,NoOfProjects,ExtensionSize,Forward Sync TimeRequired(ms),Backward Sync TimeRequired(ms)";
 
 	private static String fileName = "C:\\Users\\Srijani\\Desktop\\Report.csv";
-	
+
+	private static final String logFIle = "C:\\Users\\Srijani\\Desktop\\log.txt";
+
+	static BufferedWriter bw = null;
+	static FileWriter fw = null;
+	static java.io.File file = new java.io.File(logFIle);
+
 	public static void main(String[] args) {
-		System.out.println("STARTING");
-		
+		initializeLog();
 		addheaderToCSV(fileName);
+
+		System.out.println("STARTING");
+		WriteToLog("STARTING TEST ...");
 
 		// test for mdoel size = 10
 		int noOfWorkspace = 1;
@@ -44,23 +55,27 @@ public class TestMainClass {
 
 		int count = 0;
 		int sizeOfModel = 0;
-		while (count < 10) {
+		while (count < 1) {
 			sizeOfModel = 0;
+
 			while (sizeOfModel < 9 || sizeOfModel > 11) {
 				// generate model
-				generateModel(noOfWorkspace, noOfProjects, 4, 4, 2, 2);
-				
+				generateModel(noOfWorkspace, noOfProjects, 100);
 
 				// calculate number of extensions
 				sizeOfModel = getExtensionNumbers();
 
 				System.out.println("Model generated, size: " + sizeOfModel);
+				WriteToLog("Model generated, size: " + sizeOfModel);
+
 			}
 
 			// do sync
 			long forwardSyncTime = sync(true);
-			
+			WriteToLog("Forward sync completed");
+
 			long backwardSyncTime = sync(false);
+			WriteToLog("Backward sync completed");
 
 			// print time
 			addtoCSV(10, count, noOfWorkspace, noOfProjects, sizeOfModel, forwardSyncTime, backwardSyncTime);
@@ -70,32 +85,42 @@ public class TestMainClass {
 		}
 
 		System.out.println("Process completed for model size 10");
-/*
+		WriteToLog(
+				"Process completed for model size 10 \n ==============================================================================");
+
 		// test for mdoel size = 100
 		count = 0;
 		sizeOfModel = 0;
 		while (count < 10) {
 			while (sizeOfModel < 90 || sizeOfModel > 110) {
 				// generate model
-				generateModel(noOfWorkspace, noOfProjects, 4, 80, 3, 15);
+				generateModel(noOfWorkspace, noOfProjects, 1000);
 
 				// calculate number of extensions
 				sizeOfModel = getExtensionNumbers();
 
 				System.out.println(sizeOfModel);
+				WriteToLog("Model generated, size: " + sizeOfModel);
 			}
 
 			// do sync
-			long syncTime = sync(true);
+			// do sync
+			long forwardSyncTime = sync(true);
+			WriteToLog("Forward sync completed");
+
+			long backwardSyncTime = sync(false);
+			WriteToLog("Backward sync completed");
 
 			// print time
-			addtoCSV(10, count, noOfWorkspace, noOfProjects, sizeOfModel, syncTime);
+			addtoCSV(100, count, noOfWorkspace, noOfProjects, sizeOfModel, forwardSyncTime, backwardSyncTime);
 
 			// repeat
 			count++;
 		}
 
 		System.out.println("Process completed for model size 100");
+		WriteToLog(
+				"Process completed for model size 100 \\n ==============================================================================");
 
 		// test for mdoel size = 1000
 		noOfProjects = 10;
@@ -104,197 +129,67 @@ public class TestMainClass {
 		while (count < 10) {
 			while (sizeOfModel < 990 || sizeOfModel > 1010) {
 				// generate model
-				generateModel(noOfWorkspace, noOfProjects, 9, 800, 6, 190);
+				generateModel(noOfWorkspace, noOfProjects, 10000);
 
 				// calculate number of extensions
 				sizeOfModel = getExtensionNumbers();
 
 				System.out.println(sizeOfModel);
+				WriteToLog("Model generated, size: " + sizeOfModel);
 			}
 
 			// do sync
-			long syncTime = sync(true);
+			// do sync
+			long forwardSyncTime = sync(true);
+			WriteToLog("Forward sync completed");
+
+			long backwardSyncTime = sync(false);
+			WriteToLog("Backward sync completed");
 
 			// print time
-			addtoCSV(10, count, noOfWorkspace, noOfProjects, sizeOfModel, syncTime);
+			addtoCSV(100, count, noOfWorkspace, noOfProjects, sizeOfModel, forwardSyncTime, backwardSyncTime);
 
 			// repeat
 			count++;
 		}
 
 		System.out.println("Process completed for model size 1000");
+		WriteToLog(
+				"Process completed for model size 1000 \\n ==============================================================================");
 
 		// test for mdoel size = 10000
-		noOfProjects = 100;
-		count = 0;
-		sizeOfModel = 0;
-		while (count < 10) {
-			while (sizeOfModel < 9990 || sizeOfModel > 10010) {
-				// generate model
-				generateModel(noOfWorkspace, noOfProjects, 90, 8000, 60, 1900);
-
-				// calculate number of extensions
-				sizeOfModel = getExtensionNumbers();
-
-				System.out.println(sizeOfModel);
-			}
-
-			// do sync
-			long syncTime = sync(true);
-
-			// print time
-			addtoCSV(10, count, noOfWorkspace, noOfProjects, sizeOfModel, syncTime);
-
-			// repeat
-			count++;
-		}
-
-		System.out.println("Process completed for model size 10000");*/
-	}
-
-	/**
-	 * @param time
-	 * @param modelSize
-	 * @param loopNumber
-	 * @param noOfWorkspace
-	 * @param noOfProjects
-	 * @param extensionSize
-	 * @param forwardSyncTime
-	 * @param backwardSyncTime 
-	 */
-	private static void addtoCSV(int modelSize, int loopNumber, int noOfWorkspace, int noOfProjects, int extensionSize,
-			long forwardSyncTime, long backwardSyncTime) {
-		
-		
-		FileWriter fileWriter = null;
-		
-		try {
-			fileWriter = new FileWriter(fileName, true);
-			
-			// add data
-			fileWriter.append(LocalDateTime.now() + "");
-			fileWriter.append(COMMA_DELIMITER);
-			fileWriter.append(noOfWorkspace + "");
-			fileWriter.append(COMMA_DELIMITER);
-			fileWriter.append(noOfProjects + "");
-			fileWriter.append(COMMA_DELIMITER);
-			fileWriter.append(extensionSize + "");
-			fileWriter.append(COMMA_DELIMITER);
-			fileWriter.append(forwardSyncTime + "");
-			fileWriter.append(NEW_LINE_SEPARATOR);
-			fileWriter.append(backwardSyncTime + "");
-			fileWriter.append(NEW_LINE_SEPARATOR);
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				fileWriter.flush();
-				fileWriter.close();
-
-			} catch (IOException e) {
-				System.out.println("Error while flushing/closing fileWriter !!!");
-				e.printStackTrace();
-			}
-		}
-
-	}
-	
-	
-
-	/**
-	 * @param fileName
-	 */
-	private static void addheaderToCSV(String fileName) {
-		FileWriter fileWriter = null;
-		
-		try {
-			fileWriter = new FileWriter(fileName, true);
-
-			// Write the CSV file header
-			fileWriter.append(FILE_HEADER.toString());
-
-			// Add a new line separator after the header
-			fileWriter.append(NEW_LINE_SEPARATOR);
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				fileWriter.flush();
-				fileWriter.close();
-
-			} catch (IOException e) {
-				System.out.println("Error while flushing/closing fileWriter !!!");
-				e.printStackTrace();
-			}
-		}
-	}
-
-	/**
-	 * @param time
-	 * @param j
-	 * @param i
-	 * @param noOfProjects
-	 * @param j
-	 * @param i
-	 */
-	private static void generateModel(int noOfWorkspace, int noOfProjects, int i, int j, int k, int l) {
-		BasicConfigurator.configure();
-
-		MODELGEN_App generator;
-		try {
-			generator = new MODELGEN_App();
-
-			MODELGENStopCriterion stop = new MODELGENStopCriterion(generator.getTGG());
-
-			stop.setMaxRuleCount("XMLFolderToExcelFileRelation", noOfWorkspace);
-			stop.setMaxRuleCount("CreateSheetStructure", noOfWorkspace);
-			stop.setMaxRuleCount("PluginFolderToBlockHeaderRowRelation", noOfProjects);
-
-			stop.setMaxRuleCount("ExtensionNodeToNewRowUnderBlockHeaderRelation", i);
-			stop.setMaxRuleCount("ExtensionNodeToNewRowRelation", j);
-
-			stop.setMaxRuleCount("MultipleExtenstionPointNodeCreation", k);
-			stop.setMaxRuleCount("ExtenstionPointNodeCreation", l);
-
-			generator.setStopCriterion(stop);
-
-			System.out.println("Starting MODELGEN");
-			long tic = System.currentTimeMillis();
-			generator.run();
-			long toc = System.currentTimeMillis();
-			System.out.println("Completed MODELGEN in: " + (toc - tic) + " ms");
-
-			generator.saveModels();
-			generator.terminate();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		/*
+		 * noOfProjects = 100; count = 0; sizeOfModel = 0; while (count < 10) { while
+		 * (sizeOfModel < 9990 || sizeOfModel > 10010) { // generate model
+		 * generateModel(noOfWorkspace, noOfProjects, 90, 8000, 60, 1900);
+		 * 
+		 * // calculate number of extensions sizeOfModel = getExtensionNumbers();
+		 * 
+		 * System.out.println(sizeOfModel); }
+		 * 
+		 * // do sync long syncTime = sync(true);
+		 * 
+		 * // print time addtoCSV(10000, count, noOfWorkspace, noOfProjects,
+		 * sizeOfModel, forwardSyncTime, backwardSyncTime);
+		 * 
+		 * // repeat count++; }
+		 * 
+		 * System.out.println("Process completed for model size 10000");
+		 */
 
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	private static int getExtensionNumbers() {
 		int extNumber = 0;
 		TreeElement root = readSimpleTreeXMIModel("./instances/src.xmi");
 
 		if (root instanceof FolderImpl) {
 			Folder rootFolder = (Folder) root;
-			// System.out.println("WORKSPACE :: " + rootFolder);
 			if (rootFolder.getSubFolder().size() > 0) {
 				for (Folder project : rootFolder.getSubFolder()) {
-					// System.out.println("PROJECT :: " + project);
 					if (project.getFile().size() > 0) {
-						// System.out.println("NO OF XML :: " + project.getFile().size());
 						if (project.getFile().size() == 1) {
 							File pluginXml = project.getFile().get(0);
-							// System.out.println(" XML :: " + pluginXml.getName());
 							if (pluginXml.getRootNode().getName().equalsIgnoreCase("plugin")) {
 								if (pluginXml.getRootNode() instanceof Node) {
 									Node pluginNode = (Node) pluginXml.getRootNode();
@@ -315,11 +210,189 @@ public class TestMainClass {
 
 		}
 
-		System.out.println(extNumber);
-
 		return extNumber;
 	}
+	private static void initializeLog() {
+		// if file doesnt exists, then create it
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
 
+				fw = new FileWriter(file.getAbsoluteFile(), true);
+				bw = new BufferedWriter(fw);
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+
+				try {
+					if (bw != null)
+						bw.close();
+					if (fw != null)
+						fw.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+			}
+		}
+	}
+
+	/**
+	 * writes to local log
+	 * 
+	 * @param string
+	 */
+	private static void WriteToLog(String string) {
+		try {
+			fw = new FileWriter(file.getAbsoluteFile(), true);
+			bw = new BufferedWriter(fw);
+
+			bw.write(LocalDateTime.now() + "	" +string);
+			bw.newLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (bw != null)
+					bw.close();
+				if (fw != null)
+					fw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	/**
+	 * @param time
+	 * @param modelSize
+	 * @param loopNumber
+	 * @param noOfWorkspace
+	 * @param noOfProjects
+	 * @param extensionSize
+	 * @param forwardSyncTime
+	 * @param backwardSyncTime
+	 */
+	private static void addtoCSV(int modelSize, int loopNumber, int noOfWorkspace, int noOfProjects, int extensionSize,
+			long forwardSyncTime, long backwardSyncTime) {
+
+		FileWriter fileWriter = null;
+
+		try {
+			fileWriter = new FileWriter(fileName, true);
+
+			// add data
+			fileWriter.append(LocalDateTime.now() + "");
+			fileWriter.append(COMMA_DELIMITER);
+			fileWriter.append(noOfWorkspace + "");
+			fileWriter.append(COMMA_DELIMITER);
+			fileWriter.append(noOfProjects + "");
+			fileWriter.append(COMMA_DELIMITER);
+			fileWriter.append(extensionSize + "");
+			fileWriter.append(COMMA_DELIMITER);
+			fileWriter.append(forwardSyncTime + "");
+			fileWriter.append(COMMA_DELIMITER);
+			fileWriter.append(backwardSyncTime + "");
+			fileWriter.append(NEW_LINE_SEPARATOR);
+
+		} catch (IOException e) {
+			WriteToLog("exception ::" + e.getMessage());
+		} finally {
+			try {
+				fileWriter.flush();
+				fileWriter.close();
+
+			} catch (IOException e) {
+				System.out.println("Error while flushing/closing fileWriter !!!");
+				WriteToLog("Error while flushing/closing fileWriter !!!");
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	/**
+	 * @param fileName
+	 */
+	private static void addheaderToCSV(String fileName) {
+		FileWriter fileWriter = null;
+
+		try {
+			fileWriter = new FileWriter(fileName, true);
+
+			// Write the CSV file header
+			fileWriter.append(FILE_HEADER.toString());
+
+			// Add a new line separator after the header
+			fileWriter.append(NEW_LINE_SEPARATOR);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			WriteToLog("exception ::" + e.getMessage());
+		} finally {
+			try {
+				fileWriter.flush();
+				fileWriter.close();
+
+			} catch (IOException e) {
+				System.out.println("Error while flushing/closing fileWriter !!!");
+				WriteToLog("Error while flushing/closing fileWriter !!!");
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * @param time
+	 * @param j
+	 * @param i
+	 * @param noOfProjects
+	 * @param j
+	 * @param i
+	 */
+	private static void generateModel(int noOfWorkspace, int noOfProjects, int m) {
+		BasicConfigurator.configure();
+
+		MODELGEN_App generator;
+		try {
+			generator = new MODELGEN_App();
+
+			MODELGENStopCriterion stop = new MODELGENStopCriterion(generator.getTGG());
+
+			stop.setMaxRuleCount("XMLFolderToExcelFileRelation", noOfWorkspace);
+			stop.setMaxRuleCount("CreateSheetStructure", noOfWorkspace);
+			stop.setMaxRuleCount("PluginFolderToBlockHeaderRowRelation", noOfProjects);
+
+			stop.setMaxSrcCount(m);
+
+			// stop.setMaxRuleCount("ExtensionNodeToNewRowUnderBlockHeaderRelation", i);
+			// stop.setMaxRuleCount("ExtensionNodeToNewRowRelation", j);
+
+			generator.setStopCriterion(stop);
+
+			System.out.println("Starting MODELGEN");
+			WriteToLog("Starting MODELGEN");
+			long tic = System.currentTimeMillis();
+			generator.run();
+			long toc = System.currentTimeMillis();
+			System.out.println("Completed MODELGEN in: " + (toc - tic) + " ms");
+			WriteToLog("Completed MODELGEN in: " + (toc - tic) + " ms");
+
+			generator.saveModels();
+			generator.terminate();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	
 	/**
 	 * @return
 	 * 
@@ -354,6 +427,7 @@ public class TestMainClass {
 			return obj;
 		} catch (Exception e) {
 			System.out.println("ERROR :: " + e);
+			WriteToLog("ERROR :: " + e);
 		}
 		return null;
 	}

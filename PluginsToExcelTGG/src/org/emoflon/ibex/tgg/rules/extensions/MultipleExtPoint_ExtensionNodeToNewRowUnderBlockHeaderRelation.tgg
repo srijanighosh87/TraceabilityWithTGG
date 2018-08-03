@@ -133,7 +133,7 @@
 }
 
 #attributeConditions {
-	concat(".", newpluginFolder.name, newextensionPointAttr.value, extensionAttr.value)
+	concat("#", newpluginFolder.name, newextensionPointAttr.value, extensionAttr.value)
 	//eq_string(extensionPointAttr.value, extensionAttr.value)
 	eq_string(extensionAttr.value, cell_2.text)
 }

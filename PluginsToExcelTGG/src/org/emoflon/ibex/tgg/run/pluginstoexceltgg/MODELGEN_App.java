@@ -43,9 +43,6 @@ public class MODELGEN_App extends MODELGEN {
 		stop.setMaxRuleCount("ExtensionNodeToNewRowUnderBlockHeaderRelation", 90);
 		stop.setMaxRuleCount("ExtensionNodeToNewRowRelation", 8000);
 
-		stop.setMaxRuleCount("MultipleExtenstionPointNodeCreation", 60);
-		stop.setMaxRuleCount("ExtenstionPointNodeCreation", 1900);
-
 		// stop.setMaxSrcCount(20);
 		// stop.setMaxElementCount(20);
 		// stop.setTimeOutInMS(500);

@@ -82,7 +82,6 @@ public class XmlToExcelConversion {
 				Folder workspaceFolder = (Folder) simpleTreeOptionalModel.get();
 				
 				for (Folder projectFolder : workspaceFolder.getSubFolder()) {
-					int index = 0;
 					
 					for(int i = 0; i<projectFolder.getFile().size(); i++) {
 						Simpletree.File nonPluginXmlFile = projectFolder.getFile().get(i);
@@ -283,6 +282,7 @@ public class XmlToExcelConversion {
 	 * @return
 	 */
 	public TreeElement readSimpleTreeXMIModel() {
+		SimpletreePackage sp = SimpletreePackage.eINSTANCE;
 		ResourceSet rs = new ResourceSetImpl();
 		rs.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
 		Resource resource = rs.getResource(URI.createURI(CONSTANTS.SIMPLE_TREE_XMI_PATH), true);

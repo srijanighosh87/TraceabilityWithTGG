@@ -88,12 +88,12 @@ public class SYNC_App extends SYNC {
 		options.projectName("PluginsToExcelTGG");
 		options.projectPath("PluginsToExcelTGG");
 		
+	
 		//change optimizers
-		options.minimumNumberOfEdgesToCreateEdgePatterns(20);
+		options.minimumNumberOfEdgesToCreateEdgePatterns(15)  ;
 		options.setCorrContextNodesAsLocalNodes(true); 
-		options.stronglyTypedEdgedPatterns(false);
-		
-		//options.debug(true);
+		options.stronglyTypedEdgedPatterns(true);	
+ 		options.debug(false);
 		
 		options.userDefinedConstraints(new UserDefinedRuntimeTGGAttrConstraintFactory());
 		return options;
